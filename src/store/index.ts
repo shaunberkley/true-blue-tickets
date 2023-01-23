@@ -1,6 +1,6 @@
 import type { Session } from "@supabase/supabase-js";
 import { defineStore } from "pinia";
-import type { Profile } from "../views/UsersView.vue";
+import type { Profile } from "../core/types/user.model";
 
 export const useCounterStore = defineStore("counter", {
     state: () => ({ count: 0 }),
