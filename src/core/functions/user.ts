@@ -24,8 +24,8 @@ export async function inviteUser(invitedUser: InvitedUser) {
         .single();
 
     const ctaLink: string = `https://truebluetickets.vercel.app/sign-up?inviteCode=${data?.id}`;
-    const bodyText: string = `${userProfileStore().profile.first_name} ${
-        userProfileStore().profile.last_name
+    const bodyText: string = `${userProfileStore()?.profile?.first_name} ${
+        userProfileStore()?.profile?.last_name
     } has given you exclusive access to purchase Los Angeles Dodgers tickets from their full-season package. Create your account to view tickets available for purchase.`;
     const cta: string = "Sign Up";
     const heading: string = `You have been invited to join True Blue Tickets ${
