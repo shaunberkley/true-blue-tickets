@@ -61,7 +61,7 @@ import { Menu, MenuItem, MenuItems, MenuButton } from "@headlessui/vue";
 import AvatarComponent from "../components/AvatarComponent.vue";
 
 import { RouterLink } from "vue-router";
-import type { Profile } from "../views/UsersView.vue";
+import type { Profile } from "../core/types/user.model";
 
 defineProps({
     user: Object as PropType<Profile | null>,
