@@ -32,10 +32,10 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { supabase } from "../core/functions/supabase";
 import { onMounted, ref, toRefs } from "vue";
-import Avatar from "../components/Avatar.vue";
+import Avatar from "../components/AvatarComponent.vue";
 const props = defineProps(["session"]);
 const { session } = toRefs(props);
 const loading = ref(true);
@@ -47,7 +47,7 @@ onMounted(() => {
 async function getProfile() {
     try {
         loading.value = true;
-        const { user } = session.value;
+        const { user } = session?.value;
         let { data, error, status } = await supabase
             .from("profiles")
             .select(`username, email, avatar_url`)
@@ -58,7 +58,7 @@ async function getProfile() {
             username.value = data.username;
             avatar_url.value = data.avatar_url;
         }
-    } catch (error) {
+    } catch (error: any) {
         alert(error.message);
     } finally {
         loading.value = false;
@@ -68,7 +68,7 @@ async function updateProfile() {
     console.log(avatar_url.value);
     try {
         loading.value = true;
-        const { user } = session.value;
+        const { user } = session?.value;
         const updates = {
             id: user.id,
             username: username.value,
@@ -78,7 +78,7 @@ async function updateProfile() {
         };
         let { error } = await supabase.from("profiles").upsert(updates);
         if (error) throw error;
-    } catch (error) {
+    } catch (error: any) {
         alert(error.message);
     } finally {
         loading.value = false;
@@ -89,7 +89,7 @@ async function signOut() {
         loading.value = true;
         let { error } = await supabase.auth.signOut();
         if (error) throw error;
-    } catch (error) {
+    } catch (error: any) {
         alert(error.message);
     } finally {
         loading.value = false;
