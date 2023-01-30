@@ -43,7 +43,7 @@ export interface Reservation {
     created_at: Date;
     updated_at: Date;
     status: "pending" | "confirmed" | "declined";
-    game: number | Game;
+    game: Game;
     profile: Profile;
 }
 

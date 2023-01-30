@@ -20,14 +20,9 @@
                         >
                             <div v-for="item in navigation">
                                 <router-link
-                                    v-if="
-                                        !item.isAuthenticated ||
-                                        (item.isAuthenticated && userCanEdit)
-                                    "
                                     :key="item.name"
                                     :to="item.link"
                                     active-class="bg-gray-900 text-white"
-                                    exact-active-class="bg-gray-900 text-white"
                                     class="px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
                                     >{{ item.name }}</router-link
                                 >
@@ -184,13 +179,12 @@
         </header>
 
         <div
-            class="h-full overflow-y-auto relative z-0 flex flex-1 flex-row-reverse xl:flex-row"
+            class="h-full overflow-y-auto relative z-0"
             :key="authStore.currentUser?.user?.id"
         >
             <RouterView />
         </div>
     </div>
-    {{ authStore.currentUser?.user?.id }}
 </template>
 
 <script setup lang="ts">
@@ -227,11 +221,11 @@ if (router.currentRoute.value.meta.isAuthenticated) authStore.loadUser();
 
 let navigation = [
     {
-        name: "Games",
+        name: "Schedule",
         link: "/",
         isAuthenticated: true,
     },
-    { name: "My Tickets", link: "/my-tickets", isAuthenticated: true },
+    { name: "My Games", link: "/my-games", isAuthenticated: true },
 ];
 
 const userCanEdit = ref<boolean>(false);

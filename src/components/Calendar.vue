@@ -24,6 +24,7 @@
                         <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
                     <button
+                        @click="goToCurrentMonth"
                         type="button"
                         class="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
                     >
@@ -118,8 +119,9 @@
                             </MenuItems>
                         </transition>
                     </Menu>
-                    <div class="ml-6 h-6 w-px bg-gray-300" />
+                    <div v-if="userCanEdit" class="ml-6 h-6 w-px bg-gray-300" />
                     <button
+                        v-if="userCanEdit"
                         @click="addGame"
                         type="button"
                         class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -149,7 +151,7 @@
                         <MenuItems
                             class="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                         >
-                            <div class="py-1">
+                            <div class="py-1" v-if="userCanEdit">
                                 <MenuItem v-slot="{ active }">
                                     <a
                                         href="#"
@@ -159,37 +161,26 @@
                                                 : 'text-gray-700',
                                             'block px-4 py-2 text-sm',
                                         ]"
-                                        >Create event</a
+                                        >Add game</a
                                     >
                                 </MenuItem>
                             </div>
                             <div class="py-1">
                                 <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
+                                    <button
+                                        @click="goToCurrentMonth"
                                         :class="[
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
                                                 : 'text-gray-700',
                                             'block px-4 py-2 text-sm',
                                         ]"
-                                        >Go to today</a
                                     >
+                                        Go to today
+                                    </button>
                                 </MenuItem>
                             </div>
                             <div class="py-1">
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Day view</a
-                                    >
-                                </MenuItem>
                                 <MenuItem v-slot="{ active }">
                                     <a
                                         href="#"
@@ -212,18 +203,6 @@
                                             'block px-4 py-2 text-sm',
                                         ]"
                                         >Month view</a
-                                    >
-                                </MenuItem>
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Year view</a
                                     >
                                 </MenuItem>
                             </div>
@@ -258,7 +237,7 @@
                             ? 'bg-gray-50 text-gray-400'
                             : 'bg-white text-gray-900',
                     ]"
-                    class="flex flex-col justify-between items-stretch relative py-3 px-3 hover:bg-gray-100 focus:z-10"
+                    class="flex flex-col justify-between items-center sm:items-stretch relative py-1.5 px-1.5 sm:py-3 sm:px-3 hover:bg-gray-100 focus:z-10 text-center sm:min-h-[130px]"
                 >
                     <time
                         :attr.dateTime="day.date"
@@ -269,34 +248,47 @@
                                 ? 'bg-indigo-600 font-semibold text-white'
                                 : ''
                         "
-                        class="flex h-7 w-7 items-center justify-center rounded-full"
+                        class="flex h-7 w-7 items-center justify-center rounded-full font-bold"
                     >
                         {{ day.day > 0 ? day.day : "" }}
                     </time>
-                    <ol class="mt-4 sm:mt-8">
+                    <ol class="mt-2 sm:mt-8">
                         <li v-for="game in day.games">
                             <div
                                 v-if="
                                     getGameStatus(game.reservations) !==
                                     'Available'
                                 "
-                                class="text-right mb-3"
+                                :class="
+                                    getGameStatus(
+                                        game.reservations,
+                                        false,
+                                        true
+                                    ) === 'Reserved'
+                                        ? '-mt-2'
+                                        : 'hidden sm:block'
+                                "
+                                class="text-center sm:text-right sm:mb-3 sm:text-lg"
                             >
                                 {{ getGameStatus(game.reservations) }}
                             </div>
-                            <div class="group flex">
+                            <div
+                                class="group flex justify-center flex-col sm:flex-row"
+                            >
                                 <p
                                     class="flex items-center flex-auto truncate font-medium text-gray-900"
                                 >
                                     <img
-                                        class="h-4 mr-2"
+                                        class="h-2.5 sm:h-4 mr-2"
                                         :src="game.away_team.logo_url"
                                     />
-                                    {{ game.away_team.abbreviation }}
+                                    <span>{{
+                                        game.away_team.abbreviation
+                                    }}</span>
                                 </p>
                                 <time
                                     :attr.datetime="game.date"
-                                    class="ml-3 flex-none text-gray-500 xl:block"
+                                    class="text-xs sm:text-base mt-1 sm:mt-0 sm:ml-3 flex-none text-gray-500 xl:block"
                                     >{{
                                         formatDate(
                                             game.date.toString(),
@@ -353,6 +345,9 @@ import SelectComponent from "../components/SelectComponent.vue";
 import type { Game } from "../core/types/games.model";
 import { getGameStatus } from "../core/functions/games";
 import router from "../router";
+import { userProfileStore } from "../store";
+import { canEdit } from "../core/functions/user";
+import { useAuthStore } from "../store/auth";
 
 const emit = defineEmits([
     "openAddGame",
@@ -380,6 +375,8 @@ const currentMonthIndex = ref<number>(props.startMonth ?? 2);
 const currentYear = ref<number>(props.startYear ?? today.getFullYear());
 const month = ref<CalendarObject>(getFormattedMonth());
 
+const userCanEdit = ref<boolean>(false);
+
 onMounted(() => {
     const range = (start: number, stop: number, step: number) =>
         Array.from(
@@ -393,6 +390,10 @@ onMounted(() => {
     ).map((year: number) => {
         return { label: year.toString(), value: year.toString() };
     });
+
+    if (useAuthStore().currentUser?.user?.id) {
+        if (canEdit()) userCanEdit.value = true;
+    }
 });
 
 function previousMonth() {
@@ -404,7 +405,7 @@ function previousMonth() {
         currentMonthIndex.value === 0 ? 11 : currentMonthIndex.value - 1;
     month.value = getFormattedMonth();
     router.push({
-        name: "game date",
+        name: "schedule date",
         params: { date: `${currentYear.value}-${currentMonthIndex.value + 1}` },
     });
 }
@@ -417,7 +418,19 @@ function nextMonth() {
     currentMonthIndex.value = (currentMonthIndex.value + 1) % 12;
     month.value = getFormattedMonth();
     router.push({
-        name: "game date",
+        name: "schedule date",
+        params: { date: `${currentYear.value}-${currentMonthIndex.value + 1}` },
+    });
+}
+
+function goToCurrentMonth() {
+    const today = new Date();
+    currentMonthIndex.value = today.getMonth() - 1;
+    currentYear.value = today.getFullYear();
+    currentMonthIndex.value = (currentMonthIndex.value + 1) % 12;
+    month.value = getFormattedMonth();
+    router.push({
+        name: "schedule date",
         params: { date: `${currentYear.value}-${currentMonthIndex.value + 1}` },
     });
 }
@@ -465,4 +478,8 @@ function dayClicked(day: any) {
 function addGame() {
     emit("openAddGame");
 }
+
+userProfileStore().$subscribe((e) => {
+    if (canEdit()) userCanEdit.value = true;
+});
 </script>

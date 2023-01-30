@@ -1,17 +1,23 @@
 import type { Game, Reservation } from "../types/games.model";
 import { supabase } from "./supabase";
 
-export function getGameStatus(reservations: Reservation[]) {
+export function getGameStatus(
+    reservations: Reservation[],
+    showText?: boolean,
+    onlyText?: boolean
+) {
     if (
         reservations.filter((res: Reservation) => res.status === "confirmed")
             .length
     )
-        return "Reserved";
+        if (onlyText) return "Reserved";
+        else return `🚫 ${showText ? "(Reserved)" : ""}`;
     const numberOfInterests: number = reservations.filter(
         (res: Reservation) => res.status === "pending"
     ).length;
-    if (numberOfInterests > 0) return `${numberOfInterests} interested`;
-    return "Available";
+    if (numberOfInterests > 0)
+        return `👀 ${numberOfInterests} ${showText ? "interested" : ""}`;
+    return `✅ ${showText ? "(Available)" : ""}`;
 }
 
 export async function requestGame(game: Game | undefined, profile: string) {
@@ -57,8 +63,10 @@ export async function favoriteGame(game: Game, profile: string) {
         });
 
         if (error && status !== 406) throw error;
+        return;
     } catch (error: any) {
         alert(error.message);
+        return;
     }
 }
 

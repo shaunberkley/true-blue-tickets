@@ -7,6 +7,7 @@
                 @selectGame="selectGame"
                 :startMonth="startMonth - 1"
                 :startYear="startYear"
+                :key="componentKey"
             ></CalendarComponent>
         </div>
     </main>
@@ -17,27 +18,27 @@
         :isOpen="viewGameOpen"
         @closeModal="closeSelectedGameDialog()"
     >
-        <div class="flex items-center gap-4">
-            <div class="w-20 h-20 border border-gray-100 p-3 rounded-full">
-                <img
-                    class="w-full h-full"
-                    :src="selectedGame.away_team.logo_url"
-                />
-            </div>
-            <h2 class="text-xl">
-                {{ selectedGame?.away_team.location }}
-                {{ selectedGame?.away_team.name }}
-            </h2>
-        </div>
-        <div class="mt-6">
-            <h3 class="font-medium text-gray-900">Game Information</h3>
+        <div>
             <dl
-                class="mt-3 mb-20 divide-y divide-gray-200 border-t border-b border-gray-200"
+                class="mt-10 mb-20 divide-y divide-gray-200 border-gray-200 overflow-hidden"
             >
-                <div class="flex justify-between py-3 text-sm font-medium">
-                    <dt class="text-gray-500">Status</dt>
-                    <dd class="whitespace-nowrap text-gray-900">
-                        {{ getGameStatus(selectedGame.reservations) }}
+                <div
+                    class="flex justify-between items-center py-3 text-sm font-medium"
+                >
+                    <dt class="text-gray-500 shrink-0 mr-4">Away Team</dt>
+                    <dd class="text-right text-gray-900">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 shrink-0">
+                                <img
+                                    class="w-full h-full"
+                                    :src="selectedGame.away_team.logo_url"
+                                />
+                            </div>
+                            <div class="text-gray-900">
+                                {{ selectedGame?.away_team.location }}
+                                {{ selectedGame?.away_team.name }}
+                            </div>
+                        </div>
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
@@ -69,6 +70,12 @@
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
+                    <dt class="text-gray-500">Status</dt>
+                    <dd class="whitespace-nowrap text-gray-900">
+                        {{ getGameStatus(selectedGame.reservations, true) }}
+                    </dd>
+                </div>
+                <div class="flex justify-between py-3 text-sm font-medium">
                     <dt class="text-gray-500">Tickets</dt>
                     <dd
                         class="whitespace-nowrap text-gray-900 flex items-center gap-2"
@@ -92,26 +99,48 @@
                         <div>{{ selectedGameWeather?.days![0].temp }}°</div>
                     </dd>
                 </div>
-            </dl>
-            <div class="flex">
-                <button
-                    @click="gameAction"
-                    type="button"
-                    class="flex-1 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                <div
+                    class="flex justify-between py-3 text-sm font-medium items-start"
+                    v-if="selectedGameWaitlist && selectedGameWaitlist.length"
                 >
-                    {{ userGameStatus }}
-                </button>
-                <button
+                    <dt class="text-gray-500">Waitlist</dt>
+                    <dd
+                        class="whitespace-nowrap text-gray-900 flex items-center gap-2"
+                    >
+                        <ol class="list-decimal">
+                            <template
+                                v-for="reservation in selectedGameWaitlist"
+                            >
+                                <li v-if="reservation.status === 'pending'">
+                                    {{ reservation.profile.username }}
+                                </li>
+                            </template>
+                        </ol>
+                    </dd>
+                </div>
+            </dl>
+            <div class="flex" :key="componentKey">
+                <ButtonComponent
+                    class="flex-1"
+                    :style="'primary'"
+                    @click="gameAction"
+                    :loading="selectedGameLoading"
+                >
+                    <span>{{ userGameStatus }}</span>
+                    <span
+                        v-if="userGameStatus === 'Express Interest'"
+                        class="ml-2"
+                        >👀</span
+                    >
+                </ButtonComponent>
+                <!-- <button
                     @click="toggleFavorite"
                     type="button"
                     class="ml-3 rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    <HeartIcon v-if="!userFavorite" class="h-6 w-6"></HeartIcon>
-                    <SolidHeartIcon
-                        v-else
-                        class="h-6 w-6 text-red-500"
-                    ></SolidHeartIcon>
-                </button>
+                    <HeartIcon v-if="!userFavorite" class="h-5"></HeartIcon>
+                    <div v-else>❤️</div>
+                </button> -->
             </div>
         </div>
     </DialogComponent>
@@ -167,6 +196,7 @@ import { HeartIcon as SolidHeartIcon, EyeIcon } from "@heroicons/vue/24/solid";
 import { useAuthStore } from "../store/auth";
 import { useRoute } from "vue-router";
 import router from "../router";
+import ButtonComponent from "../components/ButtonComponent.vue";
 
 export default {
     components: {
@@ -176,6 +206,7 @@ export default {
         SolidHeartIcon,
         EyeIcon,
         ArrowUpOnSquareIcon,
+        ButtonComponent,
     },
     setup() {
         const loading = ref(true);
@@ -185,7 +216,10 @@ export default {
         const selectedGame = ref<Game>();
         const selectedGameWeather = ref<WeatherResponse>();
         const viewGameOpen = ref<boolean>(false);
+        const selectedGameLoading = ref<boolean>(false);
         const previewDialogOpen = ref<boolean>(false);
+
+        const componentKey = ref<number>(0);
 
         const startMonth = ref<number>(2);
         const startYear = ref<number>(new Date().getFullYear());
@@ -215,7 +249,7 @@ export default {
                 let currentMonth = new Date().getMonth();
                 startMonth.value = currentMonth < 3 ? 3 : currentMonth;
                 router.push({
-                    name: "game date",
+                    name: "schedule date",
                     params: { date: `${startYear.value}-${startMonth.value}` },
                 });
             }
@@ -239,25 +273,59 @@ export default {
             } else return undefined;
         });
 
+        const selectedGameReservation = computed(() => {
+            if (selectedGame.value) {
+                const reservation = selectedGame.value.reservations.find(
+                    (res: Reservation) => res.status === "confirmed"
+                );
+                return reservation;
+            } else return undefined;
+        });
+
+        const selectedGameWaitlist = computed(() => {
+            if (selectedGame.value && selectedGameReservation.value) {
+                const waitlist = selectedGame.value.reservations.filter(
+                    (res: Reservation) => res.status === "pending"
+                );
+                return waitlist;
+            } else return undefined;
+        });
+
         const userGameStatus = computed(() => {
             if (selectedGame.value) {
                 const userGame = selectedGame.value.reservations.find(
                     (res: Reservation) => res.profile.id === user?.id
                 );
                 if (userGame) {
+                    console.log(userGame.status);
                     switch (userGame?.status) {
                         case "confirmed":
-                            return "Cancel Interest";
+                            return "Request Cancellation";
                         case "pending":
-                            return "Cancel Interest";
+                            if (
+                                selectedGame.value.reservations.filter(
+                                    (res: Reservation) =>
+                                        res.status === "confirmed"
+                                ).length
+                            ) {
+                                return "Leave Waitlist";
+                            } else return "Cancel Interest";
                         case "declined":
                             return "Unavailable";
                     }
-                } else return "Express Interest";
+                } else {
+                    if (
+                        selectedGame.value.reservations.filter(
+                            (res: Reservation) => res.status === "confirmed"
+                        ).length
+                    ) {
+                        return "Join Waitlist";
+                    } else return "Express Interest";
+                }
             } else return "Express Interest";
         });
 
-        async function getGames() {
+        async function getGames(resetSelected?: boolean) {
             try {
                 loading.value = true;
                 let { data, error, status } = await supabase.from("games")
@@ -281,31 +349,50 @@ export default {
                 if (error && status !== 406) throw error;
                 if (data) {
                     games.value = data;
+                    if (resetSelected)
+                        selectedGame.value = data.find(
+                            (e: Game) => e.id === selectedGame.value?.id
+                        );
                 }
             } catch (error: any) {
                 alert(error.message);
             } finally {
                 loading.value = false;
+                selectedGameLoading.value = false;
             }
+            componentKey.value++;
         }
 
         async function gameAction() {
-            if (userGameStatus.value === "Express Interest") {
+            selectedGameLoading.value = true;
+            if (
+                userGameStatus.value === "Express Interest" ||
+                userGameStatus.value === "Join Waitlist"
+            ) {
                 await requestGame(selectedGame.value, user?.id ?? "");
             }
 
-            if (userGameStatus.value === "Cancel Interest") {
+            if (
+                userGameStatus.value === "Cancel Interest" ||
+                userGameStatus.value === "Request Cancellation" ||
+                userGameStatus.value === "Leave Waitlist"
+            ) {
                 await removeReservation(userReservation.value?.id ?? "");
             }
 
-            getGames();
+            getGames(true);
         }
 
         function toggleFavorite() {
-            if (userFavorite.value) removeFavoriteGame(userFavorite.value?.id);
+            if (userFavorite.value)
+                removeFavoriteGame(userFavorite.value?.id).then(() =>
+                    getGames(true)
+                );
             else {
                 if (selectedGame.value)
-                    favoriteGame(selectedGame.value, user?.id ?? "");
+                    favoriteGame(selectedGame.value, user?.id ?? "").then(() =>
+                        getGames(true)
+                    );
             }
         }
 
@@ -345,6 +432,9 @@ export default {
             selectedGameWeather,
             startMonth,
             startYear,
+            selectedGameLoading,
+            componentKey,
+            selectedGameWaitlist,
             formatDate,
             selectGame,
             getGameStatus,

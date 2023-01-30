@@ -21,7 +21,7 @@ const router = createRouter({
         },
         {
             path: "/",
-            name: "games",
+            name: "schedule",
             meta: {
                 authRequired: true,
             },
@@ -29,7 +29,7 @@ const router = createRouter({
             children: [
                 {
                     path: ":date",
-                    name: "game date",
+                    name: "schedule date",
                     meta: {
                         authRequired: true,
                     },
@@ -38,8 +38,8 @@ const router = createRouter({
             ],
         },
         {
-            path: "/my-tickets",
-            name: "My Tickets",
+            path: "/my-games",
+            name: "My Games",
             meta: {
                 authRequired: true,
             },

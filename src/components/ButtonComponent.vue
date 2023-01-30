@@ -1,16 +1,32 @@
 <template>
     <button
         type="button"
-        :disabled="disabled"
+        :disabled="disabled || loading"
         class="cursor-pointer inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100"
         :class="[
             cssClasses ?? defaultCssClasses,
             style === 'secondary' ? secondaryStyling : '',
             style === 'primary' ? primaryStyling : '',
-            disabled ? '!opacity-50 !pointer-events-none' : '',
+            disabled || loading ? '!opacity-50 !pointer-events-none' : '',
         ]"
     >
-        <slot></slot>
+        <slot v-if="!loading"></slot>
+        <div
+            v-if="loading"
+            class="inline-flex items-center justify-center text-sm font-medium text-white h-5"
+        >
+            <span class="inline-flex items-center gap-px">
+                <span
+                    class="animate-blink mx-px h-1.5 w-1.5 rounded-full bg-white"
+                ></span>
+                <span
+                    class="animate-blink animation-delay-150 mx-px h-1.5 w-1.5 rounded-full bg-white"
+                ></span>
+                <span
+                    class="animate-blink animation-delay-300 mx-px h-1.5 w-1.5 rounded-full bg-white"
+                ></span>
+            </span>
+        </div>
     </button>
 </template>
 
@@ -28,6 +44,10 @@ export default {
             default: undefined,
         },
         disabled: {
+            type: Boolean,
+            default: false,
+        },
+        loading: {
             type: Boolean,
             default: false,
         },
