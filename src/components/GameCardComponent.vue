@@ -5,6 +5,7 @@
         class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow cursor-pointer"
         @click="selectReservation()"
         @keyup.enter="selectReservation()"
+        @keyup.space="selectReservation()"
     >
         <div class="flex w-full items-center justify-between space-x-6 p-6">
             <img
