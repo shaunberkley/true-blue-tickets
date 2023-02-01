@@ -29,7 +29,7 @@
                                 >
                                     <button
                                         type="button"
-                                        class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                        class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                                         @click="closeModal"
                                     >
                                         <span class="sr-only"

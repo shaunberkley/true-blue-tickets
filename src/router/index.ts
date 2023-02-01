@@ -46,6 +46,14 @@ const router = createRouter({
             component: () => import("../views/MyTickets.vue"),
         },
         {
+            path: "/admin",
+            name: "Admin",
+            meta: {
+                authRequired: true,
+            },
+            component: () => import("../views/Admin.vue"),
+        },
+        {
             path: "/profile",
             name: "profile",
             meta: {

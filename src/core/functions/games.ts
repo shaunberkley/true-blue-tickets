@@ -1,23 +1,92 @@
-import type { Game, Reservation } from "../types/games.model";
+import type { User } from "@supabase/supabase-js";
+import type { Game, Reservation, UserGameStatus } from "../types/games.model";
 import { supabase } from "./supabase";
 
 export function getGameStatus(
-    reservations: Reservation[],
+    game: Game,
     showText?: boolean,
     onlyText?: boolean
 ) {
+    if (!game.blackout) {
+        if (
+            game.reservations.filter(
+                (res: Reservation) => res.status === "confirmed"
+            ).length
+        )
+            if (onlyText) return "Reserved";
+            else return `🚫 ${showText ? "(Reserved)" : ""}`;
+        const numberOfInterests: number = game.reservations.filter(
+            (res: Reservation) => res.status === "pending"
+        ).length;
+        if (numberOfInterests > 0)
+            return `👀 ${numberOfInterests} ${showText ? "interested" : ""}`;
+        return `✅ ${showText ? "(Available)" : ""}`;
+    } else {
+        if (onlyText) return "Blackout";
+        else return `⚫️ ${showText ? "(Blackout)" : ""}`;
+    }
+}
+
+export async function gameAction(
+    userGameStatus: UserGameStatus,
+    userReservation: Reservation | undefined,
+    selectedGame: Game | undefined,
+    user: User | undefined
+) {
     if (
-        reservations.filter((res: Reservation) => res.status === "confirmed")
-            .length
-    )
-        if (onlyText) return "Reserved";
-        else return `🚫 ${showText ? "(Reserved)" : ""}`;
-    const numberOfInterests: number = reservations.filter(
-        (res: Reservation) => res.status === "pending"
-    ).length;
-    if (numberOfInterests > 0)
-        return `👀 ${numberOfInterests} ${showText ? "interested" : ""}`;
-    return `✅ ${showText ? "(Available)" : ""}`;
+        userGameStatus === "Express Interest" ||
+        userGameStatus === "Join Waitlist"
+    ) {
+        await requestGame(selectedGame, user?.id ?? "");
+    }
+
+    if (
+        userGameStatus === "Cancel Interest" ||
+        userGameStatus === "Request Cancellation" ||
+        userGameStatus === "Leave Waitlist"
+    ) {
+        await removeReservation(userReservation?.id ?? "");
+    }
+
+    return;
+}
+
+export function getUserGameStatus(
+    selectedGame: Game | undefined,
+    user: User | undefined
+): UserGameStatus {
+    if (selectedGame) {
+        const userGame = selectedGame.reservations.find(
+            (res: Reservation) => res.profile.id === user?.id
+        );
+        if (!selectedGame.blackout) {
+            if (userGame) {
+                console.log(userGame.status);
+                switch (userGame?.status) {
+                    case "confirmed":
+                        return "Request Cancellation";
+                    case "pending":
+                        if (
+                            selectedGame.reservations.filter(
+                                (res: Reservation) => res.status === "confirmed"
+                            ).length
+                        ) {
+                            return "Leave Waitlist";
+                        } else return "Cancel Interest";
+                    case "declined":
+                        return "Unavailable";
+                }
+            } else {
+                if (
+                    selectedGame.reservations.filter(
+                        (res: Reservation) => res.status === "confirmed"
+                    ).length
+                ) {
+                    return "Join Waitlist";
+                } else return "Express Interest";
+            }
+        } else return "Unavailable";
+    } else return "Express Interest";
 }
 
 export async function requestGame(game: Game | undefined, profile: string) {

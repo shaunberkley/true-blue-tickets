@@ -1,138 +1,63 @@
 <template>
     <main class="w-full h-full overflow-auto">
         <div
-            class="mx-auto max-w-7xl pb-10 pt-4 lg:py-12 px-4 lg:px-8 overflow-auto"
+            class="mx-auto max-w-7xl pb-10 pt-4 lg:py-4 px-4 lg:px-8 overflow-auto"
         >
             <div class="flex flex-col gap-8">
                 <div>
-                    <h2 class="text-2xl font-bold">Reservations</h2>
+                    <h2 class="text-2xl font-bold mb-2">Reservations</h2>
                     <ul
                         role="list"
                         class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                     >
-                        <li
+                        <GameCardComponent
                             v-for="res in confirmedReservations"
-                            :key="res.id"
-                            class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
-                        >
-                            <div
-                                class="flex w-full items-center justify-between space-x-6 p-6"
-                            >
-                                <img
-                                    class="h-10 w-10 flex-shrink-0"
-                                    :src="res.game.away_team.logo_url"
-                                    alt=""
-                                />
-                                <div class="flex-1 truncate">
-                                    <div class="flex items-center space-x-3">
-                                        <h3
-                                            class="truncate text-sm font-medium text-gray-900"
-                                        >
-                                            {{ res.game.away_team.name }}
-                                        </h3>
-                                    </div>
-                                    <time
-                                        :attr.datetime="`${res.game.date}`"
-                                        class="mt-1 truncate text-sm text-gray-500"
-                                        >{{
-                                            formatDate(
-                                                res.game.date.toString(),
-                                                "MMMM dd, yyyy h:mm aaa"
-                                            )
-                                        }}</time
-                                    >
-                                </div>
-                            </div>
-                        </li>
+                            :reservation="res"
+                            @selectReservation="selectReservation(res)"
+                        ></GameCardComponent>
                     </ul>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold">Waitlist</h2>
+                    <h2 class="text-2xl font-bold mb-2">Waitlist</h2>
                     <ul
                         role="list"
                         class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                     >
-                        <li
+                        <GameCardComponent
                             v-for="res in waitlistReservations"
-                            :key="res.id"
-                            class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
-                        >
-                            <div
-                                class="flex w-full items-center justify-between space-x-6 p-6"
-                            >
-                                <img
-                                    class="h-10 w-10 flex-shrink-0"
-                                    :src="res.game.away_team.logo_url"
-                                    alt=""
-                                />
-                                <div class="flex-1 truncate">
-                                    <div class="flex items-center space-x-3">
-                                        <h3
-                                            class="truncate text-sm font-medium text-gray-900"
-                                        >
-                                            {{ res.game.away_team.name }}
-                                        </h3>
-                                    </div>
-                                    <time
-                                        :attr.datetime="`${res.game.date}`"
-                                        class="mt-1 truncate text-sm text-gray-500"
-                                        >{{
-                                            formatDate(
-                                                res.game.date.toString(),
-                                                "MMMM dd, yyyy h:mm aaa"
-                                            )
-                                        }}</time
-                                    >
-                                </div>
-                            </div>
-                        </li>
+                            :reservation="res"
+                            @selectReservation="selectReservation(res)"
+                        ></GameCardComponent>
                     </ul>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold">Interests</h2>
+                    <h2 class="text-2xl font-bold mb-2">Interests</h2>
                     <ul
                         role="list"
                         class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                     >
-                        <li
+                        <GameCardComponent
                             v-for="res in interestsReservations"
-                            :key="res.id"
-                            class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
-                        >
-                            <div
-                                class="flex w-full items-center justify-between space-x-6 p-6"
-                            >
-                                <img
-                                    class="h-10 w-10 flex-shrink-0"
-                                    :src="res.game.away_team.logo_url"
-                                    alt=""
-                                />
-                                <div class="flex-1 truncate">
-                                    <div class="flex items-center space-x-3">
-                                        <h3
-                                            class="truncate text-sm font-medium text-gray-900"
-                                        >
-                                            {{ res.game.away_team.name }}
-                                        </h3>
-                                    </div>
-                                    <time
-                                        :attr.datetime="`${res.game.date}`"
-                                        class="mt-1 truncate text-sm text-gray-500"
-                                        >{{
-                                            formatDate(
-                                                res.game.date.toString(),
-                                                "MMMM dd, yyyy h:mm aaa"
-                                            )
-                                        }}</time
-                                    >
-                                </div>
-                            </div>
-                        </li>
+                            :reservation="res"
+                            @selectReservation="selectReservation(res)"
+                        ></GameCardComponent>
                     </ul>
                 </div>
             </div>
         </div>
     </main>
+    <GameDialogComponent
+        v-if="reservations && reservations.length && selectedReservation"
+        :selectedGame="selectedReservation?.game"
+        :modalOpen="viewGameOpen"
+        :selectedGameWaitlist="selectedGameWaitlist"
+        :selectedGameWeather="selectedReservationWeather"
+        :selectedGameLoading="selectedReservationLoading"
+        :userGameStatus="userGameStatus"
+        :componentKey="componentKey"
+        @close="closeSelectedGameDialog"
+        @action="gameActionClicked"
+    ></GameDialogComponent>
 </template>
 
 <script lang="ts">
@@ -141,13 +66,21 @@ import { supabase } from "../core/functions/supabase";
 import type {
     Game,
     Reservation,
+    UserGameStatus,
     WeatherResponse,
 } from "../core/types/games.model";
 import { useAuthStore } from "../store/auth";
 import formatDate from "../core/functions/date-format";
+import {
+    getWeather,
+    gameAction,
+    getUserGameStatus,
+} from "../core/functions/games";
+import GameDialogComponent from "../components/GameDialogComponent.vue";
+import GameCardComponent from "../components/GameCardComponent.vue";
 
 export default {
-    components: {},
+    components: { GameDialogComponent, GameCardComponent },
     setup() {
         const user = useAuthStore().currentUser?.user;
 
@@ -164,6 +97,20 @@ export default {
 
         onMounted(() => {
             getReservations();
+        });
+
+        const userGameStatus: ComputedRef<UserGameStatus> = computed(() => {
+            return getUserGameStatus(selectedReservation.value?.game, user);
+        });
+
+        const selectedGameWaitlist = computed(() => {
+            if (selectedReservation.value?.game && selectedReservation.value) {
+                const waitlist =
+                    selectedReservation.value?.game.reservations.filter(
+                        (res: Reservation) => res.status === "pending"
+                    );
+                return waitlist;
+            } else return undefined;
         });
 
         const confirmedGames: ComputedRef<number[]> = computed(() => {
@@ -222,11 +169,16 @@ export default {
                 ).select(`
                         *,
                         profile(*),
-                        game(*, away_team(*))
+                        game(*, away_team(*), reservations(*, profile(*)))
                     `);
                 if (error && status !== 406) throw error;
                 if (data) {
                     reservations.value = data;
+                    if (resetSelected)
+                        selectedReservation.value = data.find(
+                            (e: Reservation) =>
+                                e.id === selectedReservation.value?.id
+                        );
                 }
             } catch (error: any) {
                 alert(error.message);
@@ -236,12 +188,51 @@ export default {
             componentKey.value++;
         }
 
+        async function selectReservation(reservation: Reservation) {
+            if (reservation) {
+                selectedReservation.value = reservation;
+                viewGameOpen.value = true;
+
+                selectedReservationWeather.value = await getWeather(
+                    formatDate(reservation.game.date.toString(), "yyyy-MM-dd")
+                );
+            }
+        }
+
+        async function gameActionClicked() {
+            selectedReservationLoading.value = true;
+            await gameAction(
+                userGameStatus.value,
+                selectedReservation.value,
+                selectedReservation.value?.game,
+                user
+            );
+            await getReservations(true);
+        }
+
+        function closeSelectedGameDialog() {
+            viewGameOpen.value = false;
+            selectedReservation.value = undefined;
+            selectedReservationWeather.value = undefined;
+        }
+
         return {
+            reservations,
             confirmedReservations,
             waitlistReservations,
             interestsReservations,
             confirmedGames,
+            selectedReservation,
+            selectedReservationWeather,
+            viewGameOpen,
+            componentKey,
+            userGameStatus,
+            selectedReservationLoading,
+            selectedGameWaitlist,
             formatDate,
+            selectReservation,
+            gameActionClicked,
+            closeSelectedGameDialog,
         };
     },
 };

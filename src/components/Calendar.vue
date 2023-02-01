@@ -18,7 +18,7 @@
                     <button
                         type="button"
                         @click="previousMonth"
-                        class="flex items-center justify-center rounded-l-md border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+                        class="flex items-center justify-center rounded-l-full border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
                     >
                         <span class="sr-only">Previous month</span>
                         <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
@@ -36,7 +36,7 @@
                     <button
                         type="button"
                         @click="nextMonth"
-                        class="flex items-center justify-center rounded-r-md border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+                        class="flex items-center justify-center rounded-r-full border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
                     >
                         <span class="sr-only">Next month</span>
                         <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
@@ -46,7 +46,7 @@
                     <Menu as="div" class="relative">
                         <MenuButton
                             type="button"
-                            class="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                            class="flex items-center rounded-full border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
                         >
                             Month view
                             <ChevronDownIcon
@@ -124,7 +124,7 @@
                         v-if="userCanEdit"
                         @click="addGame"
                         type="button"
-                        class="ml-6 rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="ml-6 rounded-full border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Add game
                     </button>
@@ -255,22 +255,16 @@
                     <ol class="mt-2 sm:mt-8">
                         <li v-for="game in day.games">
                             <div
-                                v-if="
-                                    getGameStatus(game.reservations) !==
-                                    'Available'
-                                "
+                                v-if="getGameStatus(game) !== 'Available'"
                                 :class="
-                                    getGameStatus(
-                                        game.reservations,
-                                        false,
-                                        true
-                                    ) === 'Reserved'
+                                    getGameStatus(game, false, true) ===
+                                    'Reserved'
                                         ? '-mt-2'
                                         : 'hidden sm:block'
                                 "
                                 class="text-center sm:text-right sm:mb-3 sm:text-lg"
                             >
-                                {{ getGameStatus(game.reservations) }}
+                                {{ getGameStatus(game) }}
                             </div>
                             <div
                                 class="group flex justify-center flex-col sm:flex-row"

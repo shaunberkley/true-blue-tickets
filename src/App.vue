@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col h-full">
         <header
-            class="bg-gray-800 shadow sticky top-0 z-30"
+            class="bg-white sticky top-0 z-30"
             v-if="authStore.currentUser?.user?.id"
         >
             <div class="mx-auto px-4 lg:px-8">
@@ -22,8 +22,8 @@
                                 <router-link
                                     :key="item.name"
                                     :to="item.link"
-                                    active-class="bg-gray-900 text-white"
-                                    class="px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white rounded-md"
+                                    active-class="bg-gray-100"
+                                    class="px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 rounded-full"
                                     >{{ item.name }}</router-link
                                 >
                             </div>
@@ -63,7 +63,7 @@
                                     class="absolute top-0 right-0 z-30 w-full max-w-none origin-top transform p-2 transition"
                                 >
                                     <div
-                                        class="divide-y divide-gray-200 rounded-lg bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5"
+                                        class="divide-y divide-gray-200 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5"
                                     >
                                         <div class="pt-3 pb-2">
                                             <div
@@ -78,7 +78,7 @@
                                                 </div>
                                                 <div class="-mr-2">
                                                     <PopoverButton
-                                                        class="inline-flex items-center justify-center rounded-md p-2 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                                                        class="inline-flex items-center justify-center rounded-md p-2 bg-white text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                                                     >
                                                         <span class="sr-only"
                                                             >Close menu</span
@@ -95,9 +95,8 @@
                                                     v-for="item in navigation"
                                                     :key="item.name"
                                                     :to="item.link"
-                                                    active-class="bg-gray-900 text-white"
-                                                    exact-active-class="bg-gray-900 text-white"
-                                                    class="block rounded-md px-3 py-2 text-base font-medium bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                                                    active-class="bg-gray-100 text-white"
+                                                    class="block rounded-md px-3 py-2 text-base font-medium bg-white text-black hover:bg-gray-100"
                                                     >{{
                                                         item.name
                                                     }}</router-link
@@ -132,7 +131,7 @@
                                             <div class="mt-3 space-y-1 px-2">
                                                 <router-link
                                                     to="/profile"
-                                                    class="block cursor-pointer rounded-md px-3 py-2 text-base font-medium bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                                                    class="block cursor-pointer rounded-md px-3 py-2 text-base font-medium bg-white text-black hover:bg-gray-100"
                                                 >
                                                     Profile
                                                 </router-link>
@@ -140,7 +139,7 @@
                                             <div class="space-y-1 px-2">
                                                 <div
                                                     @click="signOut"
-                                                    class="block cursor-pointer rounded-md px-3 py-2 text-base font-medium bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                                                    class="block cursor-pointer rounded-md px-3 py-2 text-base font-medium bg-white text-black hover:bg-gray-100"
                                                 >
                                                     Sign out
                                                 </div>
@@ -165,7 +164,7 @@
                     <div class="flex items-center lg:hidden ml-">
                         <!-- Mobile menu button -->
                         <PopoverButton
-                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                            class="inline-flex items-center justify-center rounded-md p-2 text-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         >
                             <span class="sr-only">Open main menu</span>
                             <Bars3Icon
@@ -226,6 +225,7 @@ let navigation = [
         isAuthenticated: true,
     },
     { name: "My Games", link: "/my-games", isAuthenticated: true },
+    { name: "Admin", link: "/admin", isAuthenticated: true },
 ];
 
 const userCanEdit = ref<boolean>(false);

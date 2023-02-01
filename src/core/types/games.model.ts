@@ -38,6 +38,14 @@ export interface Interest {
     profile: Profile;
 }
 
+export type UserGameStatus =
+    | "Express Interest"
+    | "Request Cancellation"
+    | "Join Waitlist"
+    | "Leave Waitlist"
+    | "Cancel Interest"
+    | "Unavailable";
+
 export interface Reservation {
     id: string;
     created_at: Date;
@@ -66,6 +74,7 @@ export interface Game {
     reservations: Reservation[];
     favorites: Favorite[];
     seat_view: string;
+    blackout: boolean;
 }
 
 export interface WeatherResponse {
