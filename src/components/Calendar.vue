@@ -258,11 +258,13 @@
                                 v-if="getGameStatus(game) !== 'Available'"
                                 :class="
                                     getGameStatus(game, false, true) ===
-                                    'Reserved'
+                                        'Reserved' ||
+                                    getGameStatus(game, false, true) ===
+                                        'Blackout'
                                         ? '-mt-2'
                                         : 'hidden sm:block'
                                 "
-                                class="text-center sm:text-right sm:mb-3 sm:text-lg"
+                                class="text-center sm:text-right sm:mb-3 sm:text-sm"
                             >
                                 {{ getGameStatus(game) }}
                             </div>
@@ -282,7 +284,7 @@
                                 </p>
                                 <time
                                     :attr.datetime="game.date"
-                                    class="text-xs sm:text-base mt-1 sm:mt-0 sm:ml-3 flex-none text-gray-500 xl:block"
+                                    class="text-xs sm:text-sm mt-1 sm:mt-0 sm:ml-3 flex-none text-gray-500 xl:block"
                                     >{{
                                         formatDate(
                                             game.date.toString(),
@@ -314,6 +316,14 @@
                 ></SelectComponent>
             </div>
         </div>
+    </section>
+
+    <section
+        class="px-4 sm:px-0 mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm justify-end text-gray-500 font-light"
+    >
+        <div>👀 People interested in game</div>
+        <div>🚫 Game reserved</div>
+        <div>⚫️ Game blacked-out</div>
     </section>
 </template>
 
