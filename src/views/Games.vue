@@ -1,6 +1,9 @@
 <template>
     <main class="w-full h-full overflow-auto">
-        <div class="mx-auto max-w-7xl pb-10 lg:py-4 lg:px-8 overflow-auto">
+        <div class="mx-auto max-w-7xl pb-10 lg:py-4 px-2 lg:px-8 overflow-auto">
+            <h1 class="font-bold text-xl mb-4">
+                2023 Season - Los Angeles Dodgers
+            </h1>
             <CalendarComponent
                 v-if="games && games.length"
                 :games="games"
