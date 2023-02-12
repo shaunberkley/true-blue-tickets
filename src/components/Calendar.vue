@@ -42,8 +42,8 @@
                         <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
                 </div>
-                <div class="hidden md:ml-4 md:hidden md:items-center">
-                    <Menu as="div" class="relative">
+                <div class="hidden md:ml-4 md:flex md:items-center">
+                    <Menu as="div" class="relative hidden">
                         <MenuButton
                             type="button"
                             class="flex items-center rounded-full border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -173,37 +173,11 @@
                                             active
                                                 ? 'bg-gray-100 text-gray-900'
                                                 : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
+                                            'block px-4 py-2 text-sm w-full text-left',
                                         ]"
                                     >
                                         Go to today
                                     </button>
-                                </MenuItem>
-                            </div>
-                            <div class="py-1">
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Week view</a
-                                    >
-                                </MenuItem>
-                                <MenuItem v-slot="{ active }">
-                                    <a
-                                        href="#"
-                                        :class="[
-                                            active
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-700',
-                                            'block px-4 py-2 text-sm',
-                                        ]"
-                                        >Month view</a
-                                    >
                                 </MenuItem>
                             </div>
                         </MenuItems>
@@ -396,6 +370,7 @@ onMounted(() => {
     });
 
     if (useAuthStore().currentUser?.user?.id) {
+        console.log(canEdit());
         if (canEdit()) userCanEdit.value = true;
     }
 });

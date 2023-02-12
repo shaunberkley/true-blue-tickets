@@ -20,6 +20,7 @@
                         >
                             <div v-for="item in navigation">
                                 <router-link
+                                    v-if="item.visible"
                                     :key="item.name"
                                     :to="item.link"
                                     active-class="bg-gray-100"
@@ -218,15 +219,26 @@ const authStore = useAuthStore();
 
 if (router.currentRoute.value.meta.isAuthenticated) authStore.loadUser();
 
-let navigation = [
+let navigation = ref([
     {
         name: "Schedule",
         link: "/",
         isAuthenticated: true,
+        visible: true,
     },
-    { name: "My Games", link: "/my-games", isAuthenticated: true },
-    { name: "Admin", link: "/admin", isAuthenticated: true },
-];
+    {
+        name: "My Games",
+        link: "/my-games",
+        isAuthenticated: true,
+        visible: true,
+    },
+    {
+        name: "Admin",
+        link: "/admin",
+        isAuthenticated: true,
+        visible: false,
+    },
+]);
 
 const userCanEdit = ref<boolean>(false);
 
@@ -269,5 +281,8 @@ onMounted(async () => {
 userProfileStore().$subscribe((e) => {
     user.value = userProfileStore().profile;
     if (canEdit()) userCanEdit.value = true;
+    if (userCanEdit.value) {
+        navigation.value[2].visible = true;
+    }
 });
 </script>
