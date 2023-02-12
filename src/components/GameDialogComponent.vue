@@ -100,7 +100,10 @@
                                 v-for="reservation in selectedGameWaitlist"
                             >
                                 <li v-if="reservation.status === 'pending'">
-                                    {{ reservation.profile.username }}
+                                    {{
+                                        reservation.profile.username ??
+                                        `${reservation.profile.first_name} ${reservation.profile.last_name}`
+                                    }}
                                 </li>
                             </template>
                         </ol>

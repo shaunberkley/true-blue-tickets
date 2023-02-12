@@ -6,7 +6,7 @@ export async function sendEmail(
 ) {
     console.log(sendEmailRequest);
     return fetch(
-        "https://gtcvrhirnvufcxygdhyr.functions.supabase.co/sendEmail",
+        "https://pyydjdgkqlixfrapjiou.functions.supabase.co/sendEmail",
         {
             method: "post",
             headers: {

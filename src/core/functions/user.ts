@@ -13,7 +13,7 @@ import { supabase } from "./supabase";
 
 export async function inviteUser(invitedUser: InvitedUser) {
     const { data, error } = await supabase
-        .from("pending_invites")
+        .from("invitations")
         .insert({
             role: invitedUser.role.id,
             email: invitedUser.email,
@@ -23,7 +23,7 @@ export async function inviteUser(invitedUser: InvitedUser) {
         .limit(1)
         .single();
 
-    const ctaLink: string = `https://truebluetickets.vercel.app/sign-up?inviteCode=${data?.id}`;
+    const ctaLink: string = `https://truebluetickets.com/sign-up?inviteCode=${data?.id}`;
     const bodyText: string = `${userProfileStore()?.profile?.first_name} ${
         userProfileStore()?.profile?.last_name
     } has given you exclusive access to purchase Los Angeles Dodgers tickets from their full-season package. Create your account to view tickets available for purchase.`;

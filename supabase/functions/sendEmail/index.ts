@@ -32,7 +32,7 @@ interface SendEmailData {
 const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers":
-        "authorization, x-client-info, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0Y3ZyaGlybnZ1ZmN4eWdkaHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njk3NzMwMjIsImV4cCI6MTk4NTM0OTAyMn0.s7wzLAAfgm0sNdIs58QzaNeN3Zu91sHS3efMRKV4bmAz, Content-Type",
+        "authorization, x-client-info, eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB5eWRqZGdrcWxpeGZyYXBqaW91Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzQwMDY0OTMsImV4cCI6MTk4OTU4MjQ5M30.fXByMAEHVdX4DfC47951HPH2IRWrUR3WBAD0obA1A0A, Content-Type",
 };
 
 const SENDGRID_API_KEY =
@@ -82,7 +82,7 @@ async function sendEmailUtility(sendEmailData: SendEmailData) {
             };
         }),
         from: {
-            email: "Guardians Hub Notifications <notifications@guardianshub.com>",
+            email: "True Blue Tickets <notifications@truebluetickets.com>",
         },
         templateId: "d-74891619c19f4c0e8eb277ce2643ce08",
     };

@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { authGuard } from "../core/guards/auth";
 
+export const admin = "ce7c9953-9ea6-47c8-bf6f-9ffd9a1a6ab8";
+export const guest = "97c08d44-4712-4c7e-b470-f29e1db25522";
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     scrollBehavior(to, from, savedPosition) {
@@ -18,6 +21,14 @@ const router = createRouter({
                 authRequired: false,
             },
             component: () => import("../views/Login.vue"),
+        },
+        {
+            path: "/sign-up",
+            name: "sign up",
+            meta: {
+                authRequired: false,
+            },
+            component: () => import("../views/SignUp.vue"),
         },
         {
             path: "/",
@@ -50,8 +61,28 @@ const router = createRouter({
             name: "Admin",
             meta: {
                 authRequired: true,
+                allowedRoles: admin,
             },
             component: () => import("../views/Admin.vue"),
+        },
+        {
+            path: "/users",
+            name: "Users",
+            meta: {
+                authRequired: true,
+            },
+            component: () => import("../views/Users.vue"),
+            children: [
+                {
+                    path: ":id",
+                    name: "user page",
+                    meta: {
+                        authRequired: false,
+                        allowedRoles: admin,
+                    },
+                    component: () => import("../views/Users.vue"),
+                },
+            ],
         },
         {
             path: "/profile",

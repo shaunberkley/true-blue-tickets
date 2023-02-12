@@ -42,7 +42,7 @@
                         <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
                 </div>
-                <div class="hidden md:ml-4 md:flex md:items-center">
+                <div class="hidden md:ml-4 md:hidden md:items-center">
                     <Menu as="div" class="relative">
                         <MenuButton
                             type="button"
