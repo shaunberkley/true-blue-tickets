@@ -253,6 +253,7 @@ export default {
                     id,
                     first_name,
                     last_name,
+                    username,
                     email,
                     username,
                     created_at,

@@ -45,13 +45,12 @@
 
                 <div class="col-span-4 sm:col-span-2">
                     <InputComponent
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        autocomplete="phone"
-                        label="Phone"
-                        :readOnly="true"
-                        v-model="phone"
+                        id="username"
+                        name="username"
+                        type="text"
+                        autocomplete="username"
+                        label="Username"
+                        v-model="username"
                     ></InputComponent>
                 </div>
 
@@ -126,7 +125,7 @@ export default {
         const firstName = ref<string>();
         const lastName = ref<string>();
         const email = ref<string>();
-        const phone = ref<string>();
+        const username = ref<string>();
         const avatarUrl = ref<string>();
         const role = ref<string>();
 
@@ -144,12 +143,7 @@ export default {
             firstName.value = userProfile.profile?.first_name ?? "";
             lastName.value = userProfile.profile?.last_name ?? "";
             email.value = useAuthStore().currentUser?.user?.email ?? "";
-            phone.value = useAuthStore().currentUser?.user?.phone
-                ? useAuthStore().currentUser?.user?.phone
-                : // For some reason new_phone does not exist on the supabase user
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  useAuthStore().currentUser?.user.new_phone;
+            username.value = userProfile.profile?.username ?? "";
             avatarUrl.value = userProfile.profile?.avatar_url ?? "";
             role.value = userProfile.profile?.role.name ?? "";
         }
@@ -166,6 +160,7 @@ export default {
                 .update({
                     first_name: firstName.value,
                     last_name: lastName.value,
+                    username: username.value,
                     updated_at: new Date(),
                 })
                 .eq("id", useAuthStore().currentUser?.user?.id ?? "")
@@ -176,7 +171,7 @@ export default {
 
         async function updateUser() {
             const updatedUser = await supabase.auth
-                .updateUser({ email: email.value, phone: phone.value })
+                .updateUser({ email: email.value })
                 .catch((error) => {
                     // Handle error
                     console.error(error);
@@ -218,7 +213,7 @@ export default {
             firstName,
             lastName,
             email,
-            phone,
+            username,
             avatarUrl,
             role,
             userProfile,

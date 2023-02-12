@@ -84,6 +84,7 @@ export async function setProfileData(userId?: string) {
                 first_name,
                 last_name,
                 email,
+                username,
                 avatar_url,
                 created_at,
                 updated_at,
