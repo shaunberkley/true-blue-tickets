@@ -76,6 +76,14 @@
                         </button>
                     </dd>
                 </div>
+                <div class="flex justify-between py-3 text-sm font-medium">
+                    <dt>Price per ticket</dt>
+                    <dd class="whitespace-nowrap">
+                        <div class="opacity-80">
+                            {{ formatter.format(selectedGame.ticket_price) }}
+                        </div>
+                    </dd>
+                </div>
                 <div
                     class="flex justify-between py-3 text-sm font-medium items-center"
                     v-if="selectedGameWeather"
@@ -178,6 +186,7 @@ import type {
 } from "../core/types/games.model";
 import DialogComponent from "../components/DialogComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
+import { formatter } from "../core/functions/currency-format";
 
 export default {
     props: {
@@ -239,6 +248,7 @@ export default {
 
         return {
             previewDialogOpen,
+            formatter,
             closeSelectedGameDialog,
             formatDate,
             getGameStatus,
