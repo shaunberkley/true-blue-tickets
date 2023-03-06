@@ -8,12 +8,10 @@
                 src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
                 alt="Your Company"
             />
-            <h2
-                class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900"
-            >
+            <h2 class="mt-6 text-center text-3xl font-bold tracking-tight">
                 Sign up for your account
             </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
+            <p class="mt-2 text-center text-sm">
                 Or
                 {{ " " }}
                 <router-link
@@ -29,7 +27,7 @@
                 <div
                     class="bg-blue-600 text-white text-center py-8 px-4 shadow rounded-lg sm:px-10 flex flex-col items-center gap-4"
                 >
-                    <div class="bg-white rounded-full p-4">
+                    <div class="bg-base-300 rounded-full p-4">
                         <HandThumbUpIcon
                             class="h-6 w-6 text-blue-600"
                             aria-hidden="true"
@@ -47,12 +45,10 @@
             v-if="!formLoading && !signedUp"
             class="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
         >
-            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <div class="bg-base-300 py-8 px-4 shadow sm:rounded-lg sm:px-10">
                 <form class="space-y-6" action="#" method="POST">
                     <div>
-                        <label
-                            for="firstName"
-                            class="block text-sm font-medium text-gray-700"
+                        <label for="firstName" class="block text-sm font-medium"
                             >First Name</label
                         >
                         <div class="mt-1">
@@ -67,9 +63,7 @@
                     </div>
 
                     <div>
-                        <label
-                            for="lastName"
-                            class="block text-sm font-medium text-gray-700"
+                        <label for="lastName" class="block text-sm font-medium"
                             >Last Name</label
                         >
                         <div class="mt-1">
@@ -84,11 +78,9 @@
                     </div>
 
                     <div>
-                        <label
-                            for="lastName"
-                            class="block text-sm font-medium text-gray-700"
+                        <label for="lastName" class="block text-sm font-medium"
                             >Username
-                            <span class="text-xs text-gray-400"
+                            <span class="text-xs"
                                 >(If you would like to remain anonymous)</span
                             ></label
                         >
@@ -104,9 +96,7 @@
                     </div>
 
                     <div>
-                        <label
-                            for="email"
-                            class="block text-sm font-medium text-gray-700"
+                        <label for="email" class="block text-sm font-medium"
                             >Email address</label
                         >
                         <div class="mt-1">

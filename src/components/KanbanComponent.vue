@@ -166,9 +166,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss">
-.moving-card {
-    @apply opacity-50 bg-gray-100 border border-blue-500;
-}
-</style>

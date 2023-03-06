@@ -6,7 +6,7 @@
     >
         <div>
             <MenuButton
-                class="rounded-full bg-white p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                class="rounded-full p-1 hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-base-300 focus:ring-offset-2 focus:ring-offset-gray-800"
             >
                 <span class="sr-only">View notifications</span>
                 <BellIcon class="h-6 w-6" aria-hidden="true" />

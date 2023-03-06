@@ -23,7 +23,7 @@
                             <button
                                 @click="close"
                                 type="button"
-                                class="-mr-1 flex rounded-md p-2 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-white"
+                                class="-mr-1 flex rounded-md p-2 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-base-300"
                             >
                                 <span class="sr-only">Dismiss</span>
                                 <XMarkIcon

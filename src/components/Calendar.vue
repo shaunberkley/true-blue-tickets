@@ -1,12 +1,12 @@
 <template>
     <section
         v-if="month && month.calendar"
-        class="relative rounded-lg overflow-hidden ring-1 ring-gray-200"
+        class="relative rounded-lg overflow-hidden ring-1 ring-base-300 shadow-xl"
     >
         <header
             class="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none"
         >
-            <h1 class="text-lg font-semibold text-gray-900">
+            <h1 class="text-lg font-semibold">
                 <time :attr.datetime="`${month.year}-${month.month}`"
                     >{{ month.month }} {{ month.year }}</time
                 >
@@ -18,7 +18,7 @@
                     <button
                         type="button"
                         @click="previousMonth"
-                        class="flex items-center justify-center rounded-l-full border border-r-0 border-gray-300 bg-white py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+                        class="flex items-center justify-center rounded-l-full border border-r-0 border-neutral-content text-base-300 bg-white py-2 pl-3 pr-4 focus:relative md:w-9 md:px-2 md:hover:bg-gray-100"
                     >
                         <span class="sr-only">Previous month</span>
                         <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
@@ -26,27 +26,27 @@
                     <button
                         @click="goToCurrentMonth"
                         type="button"
-                        class="hidden border-t border-b border-gray-300 bg-white px-3.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:relative md:block"
+                        class="hidden border-t border-b border-neutral-content text-base-300 bg-white px-3.5 text-sm font-medium hover:bg-gray-100 focus:relative md:block"
                     >
                         Today
                     </button>
                     <span
-                        class="relative -mx-px h-5 w-px bg-gray-300 md:hidden"
+                        class="relative -mx-px h-5 w-px text-secondary-content md:hidden"
                     />
                     <button
                         type="button"
                         @click="nextMonth"
-                        class="flex items-center justify-center rounded-r-full border border-l-0 border-gray-300 bg-white py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
+                        class="flex items-center justify-center rounded-r-full border border-l-0 border-neutral-content text-base-300 bg-white py-2 pl-4 pr-3 focus:relative md:w-9 md:px-2 md:hover:bg-gray-100"
                     >
                         <span class="sr-only">Next month</span>
                         <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
                     </button>
                 </div>
-                <div class="hidden md:ml-4 md:flex md:items-center">
+                <div class="hidden md:flex md:items-center">
                     <Menu as="div" class="relative hidden">
                         <MenuButton
                             type="button"
-                            class="flex items-center rounded-full border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
+                            class="flex items-center rounded-full border border-neutral-content bg-secondary py-2 pl-3 pr-2 text-sm font-medium shadow-sm hover:bg-secondary-focus"
                         >
                             Month view
                             <ChevronDownIcon
@@ -72,7 +72,7 @@
                                             href="#"
                                             :class="[
                                                 active
-                                                    ? 'bg-gray-100 text-gray-900'
+                                                    ? 'bg-base-100 text-gray-900'
                                                     : 'text-gray-700',
                                                 'block px-4 py-2 text-sm',
                                             ]"
@@ -84,7 +84,7 @@
                                             href="#"
                                             :class="[
                                                 active
-                                                    ? 'bg-gray-100 text-gray-900'
+                                                    ? 'bg-base-100 text-gray-900'
                                                     : 'text-gray-700',
                                                 'block px-4 py-2 text-sm',
                                             ]"
@@ -96,7 +96,7 @@
                                             href="#"
                                             :class="[
                                                 active
-                                                    ? 'bg-gray-100 text-gray-900'
+                                                    ? 'bg-base-100 text-gray-900'
                                                     : 'text-gray-700',
                                                 'block px-4 py-2 text-sm',
                                             ]"
@@ -108,7 +108,7 @@
                                             href="#"
                                             :class="[
                                                 active
-                                                    ? 'bg-gray-100 text-gray-900'
+                                                    ? 'bg-base-100 text-gray-900'
                                                     : 'text-gray-700',
                                                 'block px-4 py-2 text-sm',
                                             ]"
@@ -122,9 +122,8 @@
                     <div v-if="userCanEdit" class="ml-6 h-6 w-px bg-gray-300" />
                     <button
                         v-if="userCanEdit"
+                        class="btn btn-primary ml-6 !h-auto py-1"
                         @click="addGame"
-                        type="button"
-                        class="ml-6 rounded-full border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Add game
                     </button>
@@ -157,7 +156,7 @@
                                         href="#"
                                         :class="[
                                             active
-                                                ? 'bg-gray-100 text-gray-900'
+                                                ? 'bg-base-100 text-gray-900'
                                                 : 'text-gray-700',
                                             'block px-4 py-2 text-sm',
                                         ]"
@@ -171,7 +170,7 @@
                                         @click="goToCurrentMonth"
                                         :class="[
                                             active
-                                                ? 'bg-gray-100 text-gray-900'
+                                                ? 'bg-base-100 text-gray-900'
                                                 : 'text-gray-700',
                                             'block px-4 py-2 text-sm w-full text-left',
                                         ]"
@@ -189,17 +188,17 @@
             class="relative ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col"
         >
             <div
-                class="grid grid-cols-7 gap-px border-b border-gray-300 text-xs font-semibold leading-6 text-gray-700 lg:flex-none"
+                class="grid grid-cols-7 gap-px border-b border-neutral text-xs font-semibold leading-6 lg:flex-none"
             >
                 <div
-                    class="flex justify-center bg-white py-2"
+                    class="flex justify-center py-2"
                     v-for="weekday in weekdaysAbbr"
                 >
                     {{ weekday }}
                 </div>
             </div>
             <div
-                class="isolate grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-xs shadow ring-1 ring-gray-200"
+                class="isolate grid grid-cols-7 gap-px bg-base-300 text-xs shadow ring-1 ring-neutral"
             >
                 <button
                     type="button"
@@ -208,10 +207,10 @@
                     :key="i"
                     :class="[
                         day.day === 0
-                            ? 'bg-gray-50 text-gray-400'
-                            : 'bg-white text-gray-900',
+                            ? 'bg-base-100 opacity-70'
+                            : 'bg-base-100',
                     ]"
-                    class="flex flex-col justify-between items-center sm:items-stretch relative py-1.5 px-1.5 sm:py-3 sm:px-3 hover:bg-gray-100 focus:z-10 text-center sm:min-h-[130px]"
+                    class="flex flex-col justify-between items-center sm:items-stretch relative py-1.5 px-1.5 sm:py-3 sm:px-3 hover:bg-base-100 focus:z-10 text-center sm:min-h-[130px]"
                 >
                     <time
                         :attr.dateTime="day.date"
@@ -219,7 +218,7 @@
                             today.getDate() === day.day &&
                             today.getMonth() === currentMonthIndex &&
                             today.getFullYear() === currentYear
-                                ? 'bg-indigo-600 font-semibold text-white'
+                                ? 'bg-primary font-semibold text-white'
                                 : ''
                         "
                         class="flex h-7 w-7 items-center justify-center rounded-full font-bold"
@@ -246,7 +245,7 @@
                                 class="group flex justify-center flex-col sm:flex-row"
                             >
                                 <p
-                                    class="flex items-center flex-auto truncate font-medium text-gray-900"
+                                    class="flex items-center flex-auto truncate font-medium"
                                 >
                                     <img
                                         class="h-2.5 sm:h-4 mr-2"
@@ -258,7 +257,7 @@
                                 </p>
                                 <time
                                     :attr.datetime="game.date"
-                                    class="text-xs sm:text-sm mt-1 sm:mt-0 sm:ml-3 flex-none text-gray-500 xl:block"
+                                    class="text-xs sm:text-sm mt-1 sm:mt-0 sm:ml-3 flex-none xl:block"
                                     >{{
                                         formatDate(
                                             game.date.toString(),
@@ -275,7 +274,7 @@
                             day.date &&
                             eventDates.includes(day.date.getTime())
                         "
-                        class="w-3 h-3 rounded-full bg-indigo-600"
+                        class="w-3 h-3 rounded-full bg-primary"
                     ></div>
                 </button>
             </div>

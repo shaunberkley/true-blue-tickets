@@ -6,14 +6,12 @@
         @closeModal="closeSelectedGameDialog()"
     >
         <div>
-            <dl
-                class="mt-6 mb-20 divide-y divide-gray-200 border-gray-200 overflow-hidden"
-            >
+            <dl class="mt-6 mb-20 divide-y divide-neutral-500 overflow-hidden">
                 <div
                     class="flex justify-between items-center py-3 text-sm font-medium"
                 >
-                    <dt class="text-gray-500 shrink-0 mr-4">Away Team</dt>
-                    <dd class="text-right text-gray-900">
+                    <dt class="shrink-0 mr-4">Away Team</dt>
+                    <dd class="text-right">
                         <div class="flex items-center gap-2">
                             <div class="w-6 h-6 shrink-0">
                                 <img
@@ -21,7 +19,7 @@
                                     :src="selectedGame.away_team.logo_url"
                                 />
                             </div>
-                            <div class="text-gray-900">
+                            <div class="opacity-80">
                                 {{ selectedGame?.away_team.location }}
                                 {{ selectedGame?.away_team.name }}
                             </div>
@@ -29,8 +27,8 @@
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
-                    <dt class="text-gray-500">Date</dt>
-                    <dd class="whitespace-nowrap text-gray-900">
+                    <dt>Date</dt>
+                    <dd class="whitespace-nowrap opacity-80">
                         {{
                             formatDate(
                                 selectedGame?.date.toString(),
@@ -40,8 +38,8 @@
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
-                    <dt class="text-gray-500">Time</dt>
-                    <dd class="whitespace-nowrap text-gray-900">
+                    <dt>Time</dt>
+                    <dd class="whitespace-nowrap opacity-80">
                         {{
                             formatDate(
                                 selectedGame?.date.toString(),
@@ -51,26 +49,29 @@
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
-                    <dt class="text-gray-500">Day of week</dt>
-                    <dd class="whitespace-nowrap text-gray-900">
+                    <dt>Day of week</dt>
+                    <dd class="whitespace-nowrap opacity-80">
                         {{ formatDate(selectedGame?.date.toString(), "EEEE") }}
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
-                    <dt class="text-gray-500">Status</dt>
-                    <dd class="whitespace-nowrap text-gray-900">
-                        {{ getGameStatus(selectedGame, true) }}
+                    <dt>Status</dt>
+                    <dd class="whitespace-nowrap">
+                        <span>{{ getGameStatus(selectedGame, false) }}</span>
+                        <span class="opacity-80"
+                            >({{
+                                getGameStatus(selectedGame, true, true)
+                            }})</span
+                        >
                     </dd>
                 </div>
                 <div class="flex justify-between py-3 text-sm font-medium">
-                    <dt class="text-gray-500">Tickets</dt>
-                    <dd
-                        class="whitespace-nowrap text-gray-900 flex items-center gap-2"
-                    >
-                        <div>{{ selectedGame.seats }}</div>
+                    <dt>Tickets</dt>
+                    <dd class="whitespace-nowrap flex items-center gap-2">
+                        <div class="opacity-80">{{ selectedGame.seats }}</div>
                         <button @click="previewDialogOpen = true">
                             <EyeIcon
-                                class="h-5 cursor-pointer text-indigo-600 hover:text-indigo-500"
+                                class="h-5 cursor-pointer text-secondary hover:text-secondary-focus"
                             ></EyeIcon>
                         </button>
                     </dd>
@@ -79,21 +80,21 @@
                     class="flex justify-between py-3 text-sm font-medium items-center"
                     v-if="selectedGameWeather"
                 >
-                    <dt class="text-gray-500">Weather</dt>
-                    <dd
-                        class="whitespace-nowrap text-gray-900 flex items-center gap-2"
-                    >
+                    <dt>Weather</dt>
+                    <dd class="whitespace-nowrap flex items-center gap-2">
                         <img :src="getWeatherIcon().toString()" class="h-7" />
-                        <div>{{ selectedGameWeather?.days![0].temp }}°</div>
+                        <div class="opacity-80">
+                            {{ selectedGameWeather?.days![0].temp }}°
+                        </div>
                     </dd>
                 </div>
                 <div
                     class="flex justify-between py-3 text-sm font-medium items-start"
                     v-if="selectedGameWaitlist && selectedGameWaitlist.length"
                 >
-                    <dt class="text-gray-500">Waitlist</dt>
+                    <dt>Waitlist</dt>
                     <dd
-                        class="whitespace-nowrap text-gray-900 flex items-center gap-2"
+                        class="whitespace-nowrap opacity-80 flex items-center gap-2"
                     >
                         <ol class="list-decimal">
                             <template
@@ -154,7 +155,7 @@
             :href="selectedGame?.seat_view"
             target="_blank"
             type="button"
-            class="mt-4 mb-1 mx-auto w-max rounded-md flex items-center border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="mt-4 mb-1 mx-auto w-max rounded-md flex items-center border border-gray-300 bg-base-100 py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
             <div>View Full Preview</div>
             <ArrowUpOnSquareIcon class="h-4 ml-1 -mt-0.5"></ArrowUpOnSquareIcon>

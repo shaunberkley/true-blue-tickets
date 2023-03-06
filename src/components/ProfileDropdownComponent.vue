@@ -2,7 +2,7 @@
     <Menu as="div" class="hidden relative lg:inline-block text-left">
         <div>
             <MenuButton
-                class="rounded-full bg-white p-1 text-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                class="rounded-full p-1 hover:bg-base-200 focus:outline-none focus:ring-2 focus:ring-base-300 focus:ring-offset-2 focus:ring-offset-gray-800"
             >
                 <span class="sr-only">Open user menu</span>
                 <AvatarComponent
@@ -22,16 +22,16 @@
             leave-to-class="transform scale-95 opacity-0"
         >
             <MenuItems
-                class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-base-100 shadow-xl ring-1 ring-base-300 ring-opacity-5 focus:outline-none"
             >
                 <div class="px-1 py-1">
                     <MenuItem v-slot="{ active }">
                         <router-link
                             :to="'/profile'"
-                            active-class="bg-gray-100"
-                            exact-active-class="bg-gray-100"
+                            active-class="bg-base-200"
+                            exact-active-class="bg-base-200"
                             :class="[
-                                active ? 'bg-gray-100' : 'text-gray-900',
+                                active ? 'bg-base-200' : '',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                             ]"
                             >Profile</router-link
@@ -40,7 +40,7 @@
                     <MenuItem v-slot="{ active }">
                         <button
                             :class="[
-                                active ? 'bg-gray-100' : 'text-gray-900',
+                                active ? 'bg-base-100' : '',
                                 'group flex w-full items-center rounded-md px-2 py-2 text-sm',
                             ]"
                             @click="signOut"

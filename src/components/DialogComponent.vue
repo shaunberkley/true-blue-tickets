@@ -2,7 +2,7 @@
     <TransitionRoot appear :show="isOpen" as="template">
         <Dialog as="div" @close="closeModal" class="relative z-40">
             <TransitionChild as="template">
-                <div class="fixed inset-0 bg-black bg-opacity-25" />
+                <div class="fixed inset-0 bg-black bg-opacity-80" />
             </TransitionChild>
 
             <div class="fixed inset-0 overflow-y-auto">
@@ -20,7 +20,7 @@
                     >
                         <DialogPanel
                             :class="[maxWidth ?? 'w-full max-w-md', maxHeight]"
-                            class="relative transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                            class="relative transform overflow-hidden rounded-2xl bg-base-100 p-6 text-left align-middle shadow-xl transition-all"
                         >
                             <TransitionChild as="template">
                                 <div
