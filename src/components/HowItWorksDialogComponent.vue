@@ -5,30 +5,6 @@
         maxWidth="w-[600px]"
         @closeModal="closeHowItWorksDialog()"
     >
-        <!-- <div>
-            <ul
-                class="px-4 py-8 text-lg flex flex-col divide-y divide-base-200"
-            >
-                <li class="py-8 flex flex-col items-center">
-                    <img
-                        src="../assets/images/hiw-1.png"
-                        class="w-full border"
-                    />
-                    <div class="text-neutral-500 text-center mt-4">
-                        Click a date on the calendar with a game
-                    </div>
-                </li>
-                <li class="py-8 flex flex-col items-center">
-                    <img
-                        src="../assets/images/hiw-2.png"
-                        class="w-full border"
-                    />
-                    <div class="text-neutral-500 text-center mt-4">
-                        Click "Express Interest"
-                    </div>
-                </li>
-            </ul>
-        </div> -->
         <div class="carousel w-full mt-8">
             <div id="item1" class="carousel-item w-full flex-col">
                 <img src="../assets/images/hiw-1.png" class="w-full border" />
