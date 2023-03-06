@@ -1,12 +1,12 @@
 <template>
     <main class="w-full h-full overflow-auto">
         <div class="mx-auto max-w-7xl pb-10 lg:py-4 px-2 lg:px-8 overflow-auto">
-            <div class="flex items-center">
-                <h1 class="font-bold text-xl mb-4">
+            <div class="flex items-center justify-between mb-6">
+                <h1 class="font-bold text-xl">
                     2023 Season - Los Angeles Dodgers
                 </h1>
                 <button
-                    class="btn btn-secondary ml-6 !h-auto py-1"
+                    class="btn btn-outline ml-6 !h-10 !min-h-10 !py-1"
                     @click="howItWorksDialogOpen = true"
                 >
                     How does this work?
