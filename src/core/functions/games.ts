@@ -19,7 +19,9 @@ export function getGameStatus(
             (res: Reservation) => res.status === "pending"
         ).length;
         if (numberOfInterests > 0)
-            return `👀 ${numberOfInterests} ${showText ? "interested" : ""}`;
+            return `${!onlyText ? "👀 " : ""}${numberOfInterests} ${
+                showText ? "interested" : ""
+            }`;
         return `✅ ${showText ? "(Available)" : ""}`;
     } else {
         if (onlyText) return "Blackout";
