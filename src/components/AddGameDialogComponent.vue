@@ -7,7 +7,7 @@
         <form class="space-y-6 mt-8" @submit.prevent="handleSubmit">
             <div class="mt-1">
                 <DatepickerComponent
-                    :enableDateTime="false"
+                    :enableDateTime="true"
                     v-model="date"
                     id="date"
                     name="date"
