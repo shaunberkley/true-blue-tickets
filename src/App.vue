@@ -92,16 +92,18 @@
                                                 </div>
                                             </div>
                                             <div class="mt-3 space-y-1 px-2">
-                                                <router-link
-                                                    v-for="item in navigation"
-                                                    :key="item.name"
-                                                    :to="item.link"
-                                                    active-class="bg-base-300"
-                                                    class="block rounded-md px-3 py-2 text-base font-medium hover:bg-base-200"
-                                                    >{{
-                                                        item.name
-                                                    }}</router-link
-                                                >
+                                                <div v-for="item in navigation">
+                                                    <router-link
+                                                        v-if="item.visible"
+                                                        :key="item.name"
+                                                        :to="item.link"
+                                                        active-class="bg-base-300"
+                                                        class="block rounded-md px-3 py-2 text-base font-medium hover:bg-base-200"
+                                                        >{{
+                                                            item.name
+                                                        }}</router-link
+                                                    >
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="pt-4 pb-2">
@@ -117,7 +119,7 @@
                                                 </div>
                                                 <div class="ml-3">
                                                     <div
-                                                        class="text-base font-medium text-white"
+                                                        class="text-base font-medium text-neutral"
                                                     >
                                                         {{ user?.first_name }}
                                                         {{ user?.last_name }}
