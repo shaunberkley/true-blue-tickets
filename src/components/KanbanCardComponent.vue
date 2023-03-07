@@ -2,20 +2,83 @@
     <li
         class="relative flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 group hover:bg-opacity-100"
     >
-        <button
-            class="absolute top-0 right-0 flex items-center justify-center w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex"
-        >
-            <svg
-                class="w-4 h-4 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+        <Menu as="div" class="text-left">
+            <div class="absolute top-0 right-0">
+                <MenuButton
+                    class="inline-flex w-full justify-center hover:bg-base-300 rounded-md px-2 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                >
+                    <EllipsisVerticalIcon
+                        class="h-5 w-5 text-gray-500"
+                        aria-hidden="true"
+                    />
+                </MenuButton>
+            </div>
+
+            <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
             >
-                <path
-                    d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
-                />
-            </svg>
-        </button>
+                <MenuItems
+                    class="absolute right-0 z-50 mt-4 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                    <div class="px-1 py-1">
+                        <MenuItem
+                            @click="update('pending')"
+                            v-slot="{ active }"
+                            v-if="reservation.status !== 'pending'"
+                        >
+                            <button
+                                :class="[
+                                    active
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]"
+                            >
+                                Move to pending
+                            </button>
+                        </MenuItem>
+                        <MenuItem
+                            @click="update('confirmed')"
+                            v-slot="{ active }"
+                            v-if="reservation.status !== 'confirmed'"
+                        >
+                            <button
+                                :class="[
+                                    active
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]"
+                            >
+                                Confirm
+                            </button>
+                        </MenuItem>
+                        <MenuItem
+                            @click="update('declined')"
+                            v-slot="{ active }"
+                            v-if="reservation.status !== 'declined'"
+                        >
+                            <button
+                                :class="[
+                                    active
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]"
+                            >
+                                Decline
+                            </button>
+                        </MenuItem>
+                    </div>
+                </MenuItems>
+            </transition>
+        </Menu>
+
         <div class="flex items-center text-xs font-semibold rounded-full">
             <div class="flex items-center gap-2">
                 <div class="w-4 h-4 shrink-0">
@@ -68,12 +131,19 @@ import type { Reservation } from "../core/types/games.model";
 import { formatDate } from "../core/functions/date-format";
 import { CalendarIcon, ClockIcon } from "@heroicons/vue/24/solid";
 import AvatarComponent from "./AvatarComponent.vue";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
+import { EllipsisVerticalIcon } from "@heroicons/vue/20/solid";
 
 export default {
     components: {
         CalendarIcon,
         ClockIcon,
+        EllipsisVerticalIcon,
         AvatarComponent,
+        Menu,
+        MenuButton,
+        MenuItem,
+        MenuItems,
     },
     props: {
         reservation: {
@@ -81,9 +151,19 @@ export default {
             required: true,
         },
     },
-    setup() {
+    emits: ["updated"],
+    setup(props, { emit }) {
+        function update(status: "confirmed" | "pending" | "declined") {
+            emit("updated", {
+                reservation: props.reservation,
+                status: status,
+            });
+            console.log("update");
+        }
+
         return {
             formatDate,
+            update,
         };
     },
 };

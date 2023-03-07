@@ -2,6 +2,7 @@
     <!-- Component Start -->
     <div
         class="flex flex-col w-screen h-full overflow-y-hidden text-gray-700 bg-gray-50"
+        :key="componentKey"
     >
         <div class="flex flex-grow px-10 mt-4 space-x-6">
             <div
@@ -19,6 +20,7 @@
                         <KanbanCardComponent
                             v-for="reservation in interestsReservations"
                             :reservation="reservation"
+                            @updated="update($event.reservation, $event.status)"
                         ></KanbanCardComponent>
                     </ul>
                 </div>
@@ -40,6 +42,7 @@
                         <KanbanCardComponent
                             v-for="reservation in confirmedReservations"
                             :reservation="reservation"
+                            @updated="update($event.reservation, $event.status)"
                         ></KanbanCardComponent>
                     </ul>
                 </div>
@@ -61,6 +64,7 @@
                         <KanbanCardComponent
                             v-for="reservation in declinedReservations"
                             :reservation="reservation"
+                            @updated="update($event.reservation, $event.status)"
                         ></KanbanCardComponent>
                     </ul>
                 </div>
@@ -158,10 +162,25 @@ export default {
             componentKey.value++;
         }
 
+        async function update(
+            reservation: Reservation,
+            status: "pending" | "confirmed" | "declined"
+        ) {
+            console.log("update");
+            const { data } = await supabase
+                .from("reservations")
+                .update({ status: status })
+                .eq("id", reservation.id);
+
+            await getReservations();
+        }
+
         return {
             interestsReservations,
             confirmedReservations,
             declinedReservations,
+            componentKey,
+            update,
         };
     },
 };
