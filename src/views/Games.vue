@@ -10,6 +10,8 @@
                 v-if="games && games.length"
                 :games="games"
                 @selectGame="selectGame"
+                @openAddGame="openAddGameDialog()"
+                @gameAdded="getGames(true)"
                 :startMonth="startMonth - 1"
                 :startYear="startYear"
                 :key="componentKey"
@@ -29,6 +31,11 @@
         @close="closeSelectedGameDialog"
         @action="gameActionClicked()"
     ></GameDialogComponent>
+
+    <AddGameDialogComponent
+        :modalOpen="addGameDialogOpen"
+        @close="addGameDialogOpen = false"
+    ></AddGameDialogComponent>
 </template>
 
 <script lang="ts">
@@ -62,6 +69,7 @@ import { useRoute } from "vue-router";
 import router from "../router";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import GameDialogComponent from "../components/GameDialogComponent.vue";
+import AddGameDialogComponent from "../components/AddGameDialogComponent.vue";
 
 export default {
     components: {
@@ -73,15 +81,16 @@ export default {
         SolidHeartIcon,
         EyeIcon,
         ArrowUpOnSquareIcon,
+        AddGameDialogComponent,
     },
     setup() {
         const loading = ref(true);
         const games = ref<Game[]>();
-        const ƒavorites = ref<Favorite[]>();
 
         const selectedGame = ref<Game>();
         const selectedGameWeather = ref<WeatherResponse>();
         const viewGameOpen = ref<boolean>(false);
+        const addGameDialogOpen = ref<boolean>(false);
         const selectedGameLoading = ref<boolean>(false);
 
         const componentKey = ref<number>(0);
@@ -118,15 +127,6 @@ export default {
                     params: { date: `${startYear.value}-${startMonth.value}` },
                 });
             }
-        });
-
-        const userFavorite = computed(() => {
-            if (selectedGame.value) {
-                const userFavorite = selectedGame.value.favorites.find(
-                    (fav: Favorite) => fav.profile.id === user?.id
-                );
-                return userFavorite;
-            } else return undefined;
         });
 
         const userReservation = computed(() => {
@@ -170,11 +170,6 @@ export default {
                     *,
                     profile(*)
                 ),
-                favorites(
-                    *,
-                    profile(*),
-                    game(*)
-                ),
                 away_team:teams!games_away_team_fkey(
                     *,
                     league:leagues(*),
@@ -196,19 +191,6 @@ export default {
                 selectedGameLoading.value = false;
             }
             componentKey.value++;
-        }
-
-        function toggleFavorite() {
-            if (userFavorite.value)
-                removeFavoriteGame(userFavorite.value?.id).then(() =>
-                    getGames(true)
-                );
-            else {
-                if (selectedGame.value)
-                    favoriteGame(selectedGame.value, user?.id ?? "").then(() =>
-                        getGames(true)
-                    );
-            }
         }
 
         async function selectGame(game: Game) {
@@ -239,12 +221,16 @@ export default {
             await getGames(true);
         }
 
+        function openAddGameDialog() {
+            console.log("testtt");
+            addGameDialogOpen.value = true;
+        }
+
         return {
             games,
             selectedGame,
             viewGameOpen,
             userGameStatus,
-            userFavorite,
             selectedGameWeather,
             startMonth,
             startYear,
@@ -253,12 +239,14 @@ export default {
             selectedGameWaitlist,
             userReservation,
             user,
+            addGameDialogOpen,
             formatDate,
             selectGame,
             getGameStatus,
-            toggleFavorite,
             closeSelectedGameDialog,
+            openAddGameDialog,
             gameActionClicked,
+            getGames,
         };
     },
 };

@@ -72,7 +72,6 @@ export interface Game {
     seats: string;
     interests: Interest[];
     reservations: Reservation[];
-    favorites: Favorite[];
     seat_view: string;
     blackout: boolean;
     ticket_price?: number;

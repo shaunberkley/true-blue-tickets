@@ -226,16 +226,7 @@
                     <ol class="mt-2 sm:mt-8">
                         <li v-for="game in day.games">
                             <div
-                                v-if="getGameStatus(game) !== 'Available'"
-                                :class="
-                                    getGameStatus(game, false, true) ===
-                                        'Reserved' ||
-                                    getGameStatus(game, false, true) ===
-                                        'Blackout'
-                                        ? '-mt-2'
-                                        : 'hidden sm:block'
-                                "
-                                class="text-center sm:text-right sm:mb-3 sm:text-sm"
+                                class="text-center sm:text-right mb-1 sm:mb-3 sm:text-sm"
                             >
                                 {{ getGameStatus(game) }}
                             </div>
@@ -298,7 +289,8 @@
         >
             How does this work?
         </button>
-        <div>
+        <div class="flex flex-col gap-2">
+            <div>✅ Game available</div>
             <div>👀 People interested in game</div>
             <div>🚫 Game reserved</div>
             <div>⚫️ Game blacked-out</div>
@@ -308,6 +300,7 @@
     <HowItWorksDialogComponent
         :modalOpen="howItWorksDialogOpen"
         @close="howItWorksDialogOpen = false"
+        @gameAdded="gameAdded()"
     ></HowItWorksDialogComponent>
 </template>
 
@@ -343,6 +336,7 @@ const emit = defineEmits([
     "selectGame",
     "startMonth",
     "startYear",
+    "gameAdded",
 ]);
 
 const props = defineProps({
@@ -468,7 +462,12 @@ function dayClicked(day: any) {
 }
 
 function addGame() {
+    console.log("111");
     emit("openAddGame");
+}
+
+function gameAdded() {
+    emit("gameAdded");
 }
 
 userProfileStore().$subscribe((e) => {

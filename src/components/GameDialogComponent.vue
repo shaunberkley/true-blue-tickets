@@ -138,10 +138,18 @@
                     class="flex-1"
                     :style="'primary'"
                     @click="action"
-                    :disabled="userGameStatus === 'Unavailable'"
+                    :disabled="
+                        userGameStatus === 'Unavailable' ||
+                        userGameStatus === 'Request Cancellation'
+                    "
                     :loading="selectedGameLoading"
                 >
-                    <span>{{ userGameStatus }}</span>
+                    <span v-if="userGameStatus !== 'Request Cancellation'">{{
+                        userGameStatus
+                    }}</span>
+                    <span v-if="userGameStatus === 'Request Cancellation'"
+                        >Contact to request cancellation</span
+                    >
                     <span
                         v-if="userGameStatus === 'Express Interest'"
                         class="ml-2"

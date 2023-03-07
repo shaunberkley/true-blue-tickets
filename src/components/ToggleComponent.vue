@@ -1,6 +1,16 @@
 <template>
+    <label
+        v-if="label"
+        :for="name"
+        :class="
+            labelCssClasses ?? 'block text-sm font-medium text-gray-700 mb-1'
+        "
+        >{{ label }}</label
+    >
     <Switch
         :modelValue="modelValue"
+        :name="name"
+        :id="id"
         @update:modelValue="(value) => updated(value)"
         :class="[
             modelValue ? 'bg-blue-600' : 'bg-gray-200',
@@ -27,6 +37,22 @@ export default {
         modelValue: {
             type: Boolean,
             default: false,
+        },
+        label: {
+            type: String,
+            required: false,
+        },
+        labelCssClasses: {
+            type: String,
+            required: false,
+        },
+        id: {
+            type: String,
+            required: false,
+        },
+        name: {
+            type: String,
+            required: true,
         },
     },
     components: {

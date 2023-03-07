@@ -22,7 +22,7 @@ export function getGameStatus(
             return `${!onlyText ? "👀 " : ""}${numberOfInterests} ${
                 showText ? "interested" : ""
             }`;
-        return `✅ ${showText ? "(Available)" : ""}`;
+        return `${!onlyText ? "✅ " : ""}${showText ? "Available" : ""}`;
     } else {
         if (onlyText) return "Blackout";
         else return `⚫️ ${showText ? "(Blackout)" : ""}`;
