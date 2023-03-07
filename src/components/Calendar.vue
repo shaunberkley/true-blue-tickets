@@ -151,7 +151,7 @@
                             class="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-neutral ring-opacity-5 focus:outline-none"
                         >
                             <div class="py-1" v-if="userCanEdit">
-                                <MenuItem v-slot="{ active }">
+                                <MenuItem v-slot="{ active }" @click="addGame">
                                     <a
                                         href="#"
                                         :class="[
