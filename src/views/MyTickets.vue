@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, computed, type ComputedRef } from "vue";
+import { onMounted, ref, computed, type ComputedRef, type PropType } from "vue";
 import { supabase } from "../core/functions/supabase";
 import type {
     Game,
@@ -81,7 +81,13 @@ import GameCardComponent from "../components/GameCardComponent.vue";
 
 export default {
     components: { GameDialogComponent, GameCardComponent },
-    setup() {
+    props: {
+        userId: {
+            type: String,
+            required: false,
+        },
+    },
+    setup(props) {
         const user = useAuthStore().currentUser?.user;
 
         const reservations = ref<Reservation[]>();
@@ -124,7 +130,7 @@ export default {
             computed(() => {
                 const res = reservations.value?.filter(
                     (res: Reservation) =>
-                        res.profile.id === user?.id &&
+                        res.profile.id === (props.userId ?? user?.id) &&
                         res.status === "confirmed"
                 );
                 return res;
@@ -135,7 +141,7 @@ export default {
                 const res = reservations.value?.filter((res: Reservation) => {
                     return (
                         confirmedGames.value.includes(res.game.id) &&
-                        res.profile.id === user?.id &&
+                        res.profile.id === (props.userId ?? user?.id) &&
                         res.status === "pending"
                     );
                 });
@@ -148,7 +154,7 @@ export default {
                     (res: Reservation) =>
                         !confirmedGames.value.includes(res.game.id) &&
                         res.status === "pending" &&
-                        res.profile.id === user?.id
+                        res.profile.id === (props.userId ?? user?.id)
                 );
 
                 return res;
@@ -158,7 +164,8 @@ export default {
             computed(() => {
                 return reservations.value?.filter(
                     (res: Reservation) =>
-                        res.status === "declined" && res.profile.id === user?.id
+                        res.status === "declined" &&
+                        res.profile.id === (props.userId ?? user?.id)
                 );
             });
 

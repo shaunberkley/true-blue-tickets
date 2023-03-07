@@ -81,6 +81,17 @@ const router = createRouter({
                         allowedRoles: admin,
                     },
                     component: () => import("../views/Users.vue"),
+                    children: [
+                        {
+                            path: ":tab",
+                            name: "user tab",
+                            meta: {
+                                authRequired: true,
+                                allowedRoles: admin,
+                            },
+                            component: () => import("../views/Users.vue"),
+                        },
+                    ],
                 },
             ],
         },

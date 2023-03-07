@@ -103,22 +103,13 @@
         </div>
 
         <!-- Content -->
-        <div
-            class="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 px-4 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3"
-        >
-            <div class="space-y-6 lg:col-span-2"></div>
-
-            <aside
-                aria-label="guardian"
-                class="flex flex-col lg:col-span-1 gap-4"
-            >
-                <section
-                    aria-labelledby="timeline-title"
-                    class="lg:col-span-1 lg:col-start-3"
-                >
-                    <div class="bg-white py-5 shadow sm:rounded-lg"></div>
-                </section>
-            </aside>
+        <div class="mx-auto mt-8 max-w-3xl lg:max-w-7xl">
+            <div class="space-y-6 lg:col-span-2">
+                <MyTicketsVue
+                    :userId="userId"
+                    v-if="currentTab === 'games'"
+                ></MyTicketsVue>
+            </div>
         </div>
     </main>
 
@@ -186,6 +177,7 @@ import { sendEmail } from "../core/functions/email";
 import { inviteUser } from "../core/functions/user";
 import type { InvitedUser, Profile } from "../core/types/user.model";
 import type { Role } from "./Users.vue";
+import MyTicketsVue from "./MyTickets.vue";
 
 export interface Tab {
     name: string;
@@ -211,6 +203,7 @@ export default {
         DialogComponent,
         BannerComponent,
         InviteUserComponent,
+        MyTicketsVue,
     },
     props: {
         userId: {
@@ -272,7 +265,12 @@ export default {
                 {
                     name: "User Info",
                     link: `/users/${user.value?.id}`,
-                    relativeLink: "case-info",
+                    relativeLink: "user-info",
+                },
+                {
+                    name: "Games",
+                    link: `/users/${user.value?.id}/games`,
+                    relativeLink: "user-games",
                 },
             ];
         }

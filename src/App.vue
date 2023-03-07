@@ -238,6 +238,12 @@ let navigation = ref([
         isAuthenticated: true,
         visible: false,
     },
+    {
+        name: "Users",
+        link: "/users",
+        isAuthenticated: true,
+        visible: false,
+    },
 ]);
 
 const userCanEdit = ref<boolean>(false);
@@ -283,6 +289,7 @@ userProfileStore().$subscribe((e) => {
     if (canEdit()) userCanEdit.value = true;
     if (userCanEdit.value) {
         navigation.value[2].visible = true;
+        navigation.value[3].visible = true;
     }
 });
 </script>
