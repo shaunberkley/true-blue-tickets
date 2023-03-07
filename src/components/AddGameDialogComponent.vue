@@ -74,7 +74,7 @@
 
 <script lang="ts">
 import { computed, onMounted, ref, type PropType } from "vue";
-import formatDate from "../core/functions/date-format";
+import { formatDate, addDaysToDate } from "../core/functions/date-format";
 import { supabase } from "../core/functions/supabase";
 import DialogComponent from "../components/DialogComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
@@ -138,6 +138,10 @@ export default {
 
             closeAddGameDialog();
             gameAdded();
+            date.value = addDaysToDate(date.value?.toString() ?? "", 1);
+            blackout.value = false;
+            ticket_price.value = "170";
+            notes.value = undefined;
             return;
         }
 

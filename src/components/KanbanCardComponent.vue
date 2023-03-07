@@ -65,7 +65,7 @@
 <script lang="ts">
 import type { PropType } from "vue";
 import type { Reservation } from "../core/types/games.model";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 import { CalendarIcon, ClockIcon } from "@heroicons/vue/24/solid";
 import AvatarComponent from "./AvatarComponent.vue";
 

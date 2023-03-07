@@ -198,7 +198,7 @@ import { ArrowUpOnSquareIcon } from "@heroicons/vue/24/outline";
 import { EyeIcon } from "@heroicons/vue/24/solid";
 
 import { ref, type PropType } from "vue";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 import { getGameStatus } from "../core/functions/games";
 import type {
     Game,

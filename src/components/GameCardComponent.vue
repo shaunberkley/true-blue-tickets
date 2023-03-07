@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import type { PropType } from "vue";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 import type { Reservation } from "../core/types/games.model";
 
 export default {

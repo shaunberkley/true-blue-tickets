@@ -166,7 +166,7 @@ import {
     ExclamationTriangleIcon,
 } from "@heroicons/vue/20/solid";
 import { useRoute } from "vue-router";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 import AvatarComponent from "../components/AvatarComponent.vue";
 import LoadingPulseBarComponent from "../components/LoadingPulseBarComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";

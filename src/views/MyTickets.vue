@@ -70,7 +70,7 @@ import type {
     WeatherResponse,
 } from "../core/types/games.model";
 import { useAuthStore } from "../store/auth";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 import {
     getWeather,
     gameAction,

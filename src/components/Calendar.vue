@@ -300,7 +300,6 @@
     <HowItWorksDialogComponent
         :modalOpen="howItWorksDialogOpen"
         @close="howItWorksDialogOpen = false"
-        @gameAdded="gameAdded()"
     ></HowItWorksDialogComponent>
 </template>
 
@@ -319,7 +318,7 @@ import type {
     CalendarItem,
     CalendarObject,
 } from "../core/types/calendar.model";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 
 import type { SelectItem } from "../components/SelectComponent.vue";
 import SelectComponent from "../components/SelectComponent.vue";
@@ -336,7 +335,6 @@ const emit = defineEmits([
     "selectGame",
     "startMonth",
     "startYear",
-    "gameAdded",
 ]);
 
 const props = defineProps({
@@ -464,10 +462,6 @@ function dayClicked(day: any) {
 function addGame() {
     console.log("111");
     emit("openAddGame");
-}
-
-function gameAdded() {
-    emit("gameAdded");
 }
 
 userProfileStore().$subscribe((e) => {

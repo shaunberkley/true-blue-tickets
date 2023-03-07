@@ -102,7 +102,7 @@ import { userSessionStore, userProfileStore } from "../store/index";
 
 import ButtonComponent from "../components/ButtonComponent.vue";
 import type { CaseNotification } from "../core/types/notifications.model";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 
 const notifications = ref();
 

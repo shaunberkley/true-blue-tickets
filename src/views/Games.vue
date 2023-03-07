@@ -11,7 +11,6 @@
                 :games="games"
                 @selectGame="selectGame"
                 @openAddGame="openAddGameDialog()"
-                @gameAdded="getGames(true)"
                 :startMonth="startMonth - 1"
                 :startYear="startYear"
                 :key="componentKey"
@@ -35,6 +34,7 @@
     <AddGameDialogComponent
         :modalOpen="addGameDialogOpen"
         @close="addGameDialogOpen = false"
+        @gameAdded="gameAdded()"
     ></AddGameDialogComponent>
 </template>
 
@@ -42,7 +42,7 @@
 import { computed, onMounted, ref, toRefs, type ComputedRef } from "vue";
 import CalendarComponent from "../components/Calendar.vue";
 import DialogComponent from "../components/DialogComponent.vue";
-import formatDate from "../core/functions/date-format";
+import { formatDate } from "../core/functions/date-format";
 import {
     favoriteGame,
     gameAction,
@@ -222,8 +222,12 @@ export default {
         }
 
         function openAddGameDialog() {
-            console.log("testtt");
             addGameDialogOpen.value = true;
+        }
+
+        async function gameAdded() {
+            console.log("getting games");
+            await getGames(true);
         }
 
         return {
@@ -246,7 +250,7 @@ export default {
             closeSelectedGameDialog,
             openAddGameDialog,
             gameActionClicked,
-            getGames,
+            gameAdded,
         };
     },
 };
