@@ -1,16 +1,10 @@
 <template>
     <main class="w-full h-full overflow-auto">
         <div class="mx-auto max-w-7xl pb-10 lg:py-4 px-2 lg:px-8 overflow-auto">
-            <div class="flex items-center justify-between mb-6">
+            <div class="mb-6">
                 <h1 class="font-bold text-xl">
                     2023 Season - Los Angeles Dodgers
                 </h1>
-                <button
-                    class="btn btn-outline ml-6 !h-10 !min-h-10 !py-1"
-                    @click="howItWorksDialogOpen = true"
-                >
-                    How does this work?
-                </button>
             </div>
             <CalendarComponent
                 v-if="games && games.length"
@@ -35,11 +29,6 @@
         @close="closeSelectedGameDialog"
         @action="gameActionClicked()"
     ></GameDialogComponent>
-
-    <HowItWorksDialogComponent
-        :modalOpen="howItWorksDialogOpen"
-        @close="howItWorksDialogOpen = false"
-    ></HowItWorksDialogComponent>
 </template>
 
 <script lang="ts">
@@ -73,7 +62,6 @@ import { useRoute } from "vue-router";
 import router from "../router";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import GameDialogComponent from "../components/GameDialogComponent.vue";
-import HowItWorksDialogComponent from "../components/HowItWorksDialogComponent.vue";
 
 export default {
     components: {
@@ -81,7 +69,6 @@ export default {
         DialogComponent,
         ButtonComponent,
         GameDialogComponent,
-        HowItWorksDialogComponent,
         HeartIcon,
         SolidHeartIcon,
         EyeIcon,
@@ -96,7 +83,6 @@ export default {
         const selectedGameWeather = ref<WeatherResponse>();
         const viewGameOpen = ref<boolean>(false);
         const selectedGameLoading = ref<boolean>(false);
-        const howItWorksDialogOpen = ref<boolean>(false);
 
         const componentKey = ref<number>(0);
 
@@ -267,7 +253,6 @@ export default {
             selectedGameWaitlist,
             userReservation,
             user,
-            howItWorksDialogOpen,
             formatDate,
             selectGame,
             getGameStatus,

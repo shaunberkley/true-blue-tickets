@@ -75,7 +75,8 @@ export interface Game {
     favorites: Favorite[];
     seat_view: string;
     blackout: boolean;
-    ticket_price: number;
+    ticket_price?: number;
+    notes?: string;
 }
 
 export interface WeatherResponse {

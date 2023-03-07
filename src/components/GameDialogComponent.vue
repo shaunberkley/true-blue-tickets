@@ -76,11 +76,25 @@
                         </button>
                     </dd>
                 </div>
-                <div class="flex justify-between py-3 text-sm font-medium">
+                <div
+                    class="flex justify-between py-3 text-sm font-medium"
+                    v-if="selectedGame.ticket_price"
+                >
                     <dt>Price per ticket</dt>
                     <dd class="whitespace-nowrap">
                         <div class="opacity-80">
                             {{ formatter.format(selectedGame.ticket_price) }}
+                        </div>
+                    </dd>
+                </div>
+                <div
+                    class="flex justify-between py-3 text-sm font-medium"
+                    v-if="selectedGame.notes"
+                >
+                    <dt>Notes</dt>
+                    <dd class="whitespace-nowrap">
+                        <div class="opacity-80">
+                            {{ selectedGame.notes }}
                         </div>
                     </dd>
                 </div>

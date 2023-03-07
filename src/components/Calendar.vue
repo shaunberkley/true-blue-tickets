@@ -18,7 +18,7 @@
                     <button
                         type="button"
                         @click="previousMonth"
-                        class="flex items-center justify-center rounded-l-full border border-r-0 border-neutral-content text-base-300 bg-white py-2 pl-3 pr-4 focus:relative md:w-9 md:px-2 md:hover:bg-gray-100"
+                        class="flex items-center justify-center rounded-l-full border border-neutral border-r-0 bg-white py-2 pl-3 pr-4 focus:relative md:w-9 md:px-2 md:hover:bg-gray-100"
                     >
                         <span class="sr-only">Previous month</span>
                         <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
@@ -26,7 +26,7 @@
                     <button
                         @click="goToCurrentMonth"
                         type="button"
-                        class="hidden border-t border-b border-neutral-content text-base-300 bg-white px-3.5 text-sm font-medium hover:bg-gray-100 focus:relative md:block"
+                        class="hidden border-t border-b border-neutral bg-white px-3.5 text-sm font-medium hover:bg-gray-100 focus:relative md:block"
                     >
                         Today
                     </button>
@@ -36,7 +36,7 @@
                     <button
                         type="button"
                         @click="nextMonth"
-                        class="flex items-center justify-center rounded-r-full border border-l-0 border-neutral-content text-base-300 bg-white py-2 pl-4 pr-3 focus:relative md:w-9 md:px-2 md:hover:bg-gray-100"
+                        class="flex items-center justify-center rounded-r-full border border-l-0 border-neutral bg-white py-2 pl-4 pr-3 focus:relative md:w-9 md:px-2 md:hover:bg-gray-100"
                     >
                         <span class="sr-only">Next month</span>
                         <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
@@ -64,7 +64,7 @@
                             leave-to-class="transform opacity-0 scale-95"
                         >
                             <MenuItems
-                                class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                class="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-neutral ring-opacity-5 focus:outline-none"
                             >
                                 <div class="py-1">
                                     <MenuItem v-slot="{ active }">
@@ -148,7 +148,7 @@
                         leave-to-class="transform opacity-0 scale-95"
                     >
                         <MenuItems
-                            class="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            class="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-neutral ring-opacity-5 focus:outline-none"
                         >
                             <div class="py-1" v-if="userCanEdit">
                                 <MenuItem v-slot="{ active }">
@@ -185,10 +185,10 @@
             </div>
         </header>
         <div
-            class="relative ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col"
+            class="relative ring-1 ring-neutral ring-opacity-5 lg:flex lg:flex-auto lg:flex-col"
         >
             <div
-                class="grid grid-cols-7 gap-px border-b border-neutral text-xs font-semibold leading-6 lg:flex-none"
+                class="grid grid-cols-7 gap-px border-b border-base-300 text-xs font-semibold leading-6 lg:flex-none"
             >
                 <div
                     class="flex justify-center py-2"
@@ -197,9 +197,7 @@
                     {{ weekday }}
                 </div>
             </div>
-            <div
-                class="isolate grid grid-cols-7 gap-px bg-base-300 text-xs shadow ring-1 ring-neutral"
-            >
+            <div class="isolate grid grid-cols-7 gap-px bg-base-300 text-xs">
                 <button
                     type="button"
                     @click="dayClicked(day)"
@@ -292,12 +290,25 @@
     </section>
 
     <section
-        class="px-4 sm:px-0 mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm justify-end text-gray-500 font-light"
+        class="px-4 sm:px-0 mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm justify-between text-gray-500 font-light"
     >
-        <div>👀 People interested in game</div>
-        <div>🚫 Game reserved</div>
-        <div>⚫️ Game blacked-out</div>
+        <button
+            class="btn btn-outline sm:ml-6 !h-10 !min-h-8 !py-1"
+            @click="howItWorksDialogOpen = true"
+        >
+            How does this work?
+        </button>
+        <div>
+            <div>👀 People interested in game</div>
+            <div>🚫 Game reserved</div>
+            <div>⚫️ Game blacked-out</div>
+        </div>
     </section>
+
+    <HowItWorksDialogComponent
+        :modalOpen="howItWorksDialogOpen"
+        @close="howItWorksDialogOpen = false"
+    ></HowItWorksDialogComponent>
 </template>
 
 <script setup lang="ts">
@@ -325,6 +336,7 @@ import router from "../router";
 import { userProfileStore } from "../store";
 import { canEdit } from "../core/functions/user";
 import { useAuthStore } from "../store/auth";
+import HowItWorksDialogComponent from "../components/HowItWorksDialogComponent.vue";
 
 const emit = defineEmits([
     "openAddGame",
@@ -341,6 +353,8 @@ const props = defineProps({
 
 let today = new Date();
 let weekdaysAbbr = calendar().weekdaysAbbr();
+
+const howItWorksDialogOpen = ref<boolean>(false);
 
 let eventDates!: number[];
 
