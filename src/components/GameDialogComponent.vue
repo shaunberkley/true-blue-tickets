@@ -132,6 +132,44 @@
                         </ol>
                     </dd>
                 </div>
+                <div
+                    class="flex justify-between py-3 text-sm font-medium"
+                    v-if="user"
+                >
+                    <dt>User</dt>
+                    <dd class="whitespace-nowrap">
+                        <router-link
+                            :to="'/users/' + user.id"
+                            class="flex items-center gap-2"
+                        >
+                            <AvatarComponent
+                                :name="`${user?.first_name} ${user?.last_name}`"
+                                :imageUrl="user?.avatar_url"
+                                cssClasses="h-6 w-6"
+                            ></AvatarComponent>
+                            <span class="opacity-80">
+                                <span
+                                    >{{ user?.first_name }}
+                                    {{ user?.last_name }}</span
+                                >
+                                <span class="ml-1" v-if="user?.username"
+                                    >({{ user?.username }})</span
+                                >
+                            </span>
+                        </router-link>
+                    </dd>
+                </div>
+                <!-- <div
+                    class="flex justify-between py-3 text-sm font-medium"
+                    v-if="user"
+                >
+                    <dt>Games</dt>
+                        <dd class="whitespace-nowrap">
+                            <div class="opacity-80">
+                                {{ user. }}
+                            </div>
+                        </dd>
+                </div> -->
             </dl>
             <div class="flex" :key="componentKey">
                 <ButtonComponent
@@ -209,6 +247,8 @@ import type {
 import DialogComponent from "../components/DialogComponent.vue";
 import ButtonComponent from "../components/ButtonComponent.vue";
 import { formatter } from "../core/functions/currency-format";
+import type { Profile } from "../core/types/user.model";
+import AvatarComponent from "./AvatarComponent.vue";
 
 export default {
     props: {
@@ -240,12 +280,17 @@ export default {
             type: Boolean,
             required: true,
         },
+        user: {
+            type: Object as PropType<Profile | null | undefined>,
+            required: false,
+        },
     },
     components: {
         DialogComponent,
         ButtonComponent,
         EyeIcon,
         ArrowUpOnSquareIcon,
+        AvatarComponent,
     },
     emits: ["close", "action"],
     setup(props, { emit }) {

@@ -21,6 +21,14 @@
             <div id="item3" class="carousel-item w-full flex-col">
                 <img src="../assets/images/hiw-3.png" class="w-full border" />
                 <div class="text-neutral-500 text-center mt-4">
+                    We'll send you an email if your request has been accepted or
+                    declined. If accepted, you have 48 hours to send payment for
+                    your tickets.
+                </div>
+            </div>
+            <div id="item4" class="carousel-item w-full flex-col">
+                <img src="../assets/images/hiw-4.png" class="w-full border" />
+                <div class="text-neutral-500 text-center mt-4">
                     Manage your games on the "My Games" page
                 </div>
             </div>
@@ -29,6 +37,7 @@
             <a href="#item1" class="btn btn-sm !rounded-md">1</a>
             <a href="#item2" class="btn btn-sm !rounded-md">2</a>
             <a href="#item3" class="btn btn-sm !rounded-md">3</a>
+            <a href="#item4" class="btn btn-sm !rounded-md">4</a>
         </div>
     </DialogComponent>
 </template>

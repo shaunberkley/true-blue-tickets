@@ -106,7 +106,7 @@
         <div class="mx-auto mt-8 max-w-3xl lg:max-w-7xl">
             <div class="space-y-6 lg:col-span-2">
                 <MyTicketsVue
-                    :userId="userId"
+                    :user="user"
                     v-if="currentTab === 'games'"
                 ></MyTicketsVue>
             </div>

@@ -55,6 +55,7 @@
         :selectedGameLoading="selectedReservationLoading"
         :userGameStatus="userGameStatus"
         :componentKey="componentKey"
+        :user="user"
         @close="closeSelectedGameDialog"
         @action="gameActionClicked"
     ></GameDialogComponent>
@@ -78,12 +79,13 @@ import {
 } from "../core/functions/games";
 import GameDialogComponent from "../components/GameDialogComponent.vue";
 import GameCardComponent from "../components/GameCardComponent.vue";
+import type { Profile } from "../core/types/user.model";
 
 export default {
     components: { GameDialogComponent, GameCardComponent },
     props: {
-        userId: {
-            type: String,
+        user: {
+            type: Object as PropType<Profile | null | undefined>,
             required: false,
         },
     },
@@ -130,7 +132,7 @@ export default {
             computed(() => {
                 const res = reservations.value?.filter(
                     (res: Reservation) =>
-                        res.profile.id === (props.userId ?? user?.id) &&
+                        res.profile.id === (props.user?.id ?? user?.id) &&
                         res.status === "confirmed"
                 );
                 return res;
@@ -141,7 +143,7 @@ export default {
                 const res = reservations.value?.filter((res: Reservation) => {
                     return (
                         confirmedGames.value.includes(res.game.id) &&
-                        res.profile.id === (props.userId ?? user?.id) &&
+                        res.profile.id === (props.user?.id ?? user?.id) &&
                         res.status === "pending"
                     );
                 });
@@ -154,7 +156,7 @@ export default {
                     (res: Reservation) =>
                         !confirmedGames.value.includes(res.game.id) &&
                         res.status === "pending" &&
-                        res.profile.id === (props.userId ?? user?.id)
+                        res.profile.id === (props.user?.id ?? user?.id)
                 );
 
                 return res;
@@ -165,7 +167,7 @@ export default {
                 return reservations.value?.filter(
                     (res: Reservation) =>
                         res.status === "declined" &&
-                        res.profile.id === (props.userId ?? user?.id)
+                        res.profile.id === (props.user?.id ?? user?.id)
                 );
             });
 
