@@ -5,7 +5,10 @@
             v-if="authStore.currentUser?.user?.id"
         >
             <div class="mx-auto px-4 lg:px-8">
-                <Popover class="flex h-16 justify-between" v-slot="{ open }">
+                <Popover
+                    class="flex h-16 justify-between"
+                    v-slot="{ open, close }"
+                >
                     <div class="flex px-2 lg:px-0">
                         <div class="flex flex-shrink-0 items-center">
                             <img
@@ -23,6 +26,7 @@
                                     v-if="item.visible"
                                     :key="item.name"
                                     :to="item.link"
+                                    @click="() => close()"
                                     active-class="bg-base-200"
                                     class="px-3 py-2 text-sm font-medium rounded-full hover:bg-base-200"
                                     >{{ item.name }}</router-link
@@ -97,6 +101,7 @@
                                                         v-if="item.visible"
                                                         :key="item.name"
                                                         :to="item.link"
+                                                        @click="() => close()"
                                                         active-class="bg-base-300"
                                                         class="block rounded-md px-3 py-2 text-base font-medium hover:bg-base-200"
                                                         >{{
