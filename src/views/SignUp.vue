@@ -150,6 +150,15 @@ import { useRoute, RouterLink } from "vue-router";
 import InputComponent from "../components/InputComponent.vue";
 import { HandThumbUpIcon } from "@heroicons/vue/24/outline";
 import type { Profile } from "../core/types/user.model";
+import type {
+    SendEmailItem,
+    SendEmailRequest,
+} from "../core/types/email.model";
+import { admin } from "../core/guards/auth";
+import { error } from "console";
+import { sendEmail } from "../core/functions/email";
+import { useAuthStore } from "../store/auth";
+import type { Role } from "./Users.vue";
 
 export interface PendingInvite {
     id: string;
@@ -176,6 +185,8 @@ export default {
         const username = ref<string>("");
         const email = ref<string>("");
         const password = ref<string>("");
+
+        const roles = ref<Role[]>();
 
         const errorMessage = ref<any>("");
         const bannerOpen = ref<boolean>(false);
@@ -227,6 +238,9 @@ export default {
                 bannerTimer.value = undefined;
                 bannerOpen.value = true;
             }
+
+            const { data } = await supabase.from("roles").select();
+            roles.value = data as Role[];
         });
 
         async function signUp() {
@@ -275,6 +289,51 @@ export default {
                 .eq("id", inviteCode.value);
 
             signedUp.value = true;
+
+            try {
+                let getAdmins = await supabase
+                    .from("profiles")
+                    .select()
+                    .eq("role", admin);
+
+                const admins: SendEmailItem[] | undefined = getAdmins.data?.map(
+                    (profile: Profile) => {
+                        return {
+                            email: profile.email,
+                            name: `${profile.first_name} ${profile.last_name}`,
+                        } as SendEmailItem;
+                    }
+                );
+
+                const heading = `${firstName.value} ${lastName.value} has accepted their invitation`;
+
+                const role = roles.value?.find(
+                    (role: Role) => role.id === pendingInvite.value?.role
+                )?.name;
+
+                const bodyText = `The user has joined with the following role: ${role}`;
+
+                if (getAdmins.error || error) throw error;
+
+                const sendEmailRequest: SendEmailRequest = {
+                    sendEmail: admins ?? [],
+                    subject: heading,
+                    sendName: "",
+                    header: heading,
+                    heading: heading,
+                    bodyText: bodyText,
+                    cta: `View user`,
+                    ctaLink: `https://truebluetickets.com/users/${signUpRes.data.user?.id}`,
+                };
+
+                await sendEmail(
+                    useAuthStore().currentUser?.access_token ?? "",
+                    sendEmailRequest
+                );
+            } catch (error: any) {
+                alert(error.message);
+                return error;
+            }
         }
 
         return {
