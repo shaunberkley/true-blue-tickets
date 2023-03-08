@@ -155,7 +155,6 @@ import type {
     SendEmailRequest,
 } from "../core/types/email.model";
 import { admin } from "../core/guards/auth";
-import { error } from "console";
 import { sendEmail } from "../core/functions/email";
 import { useAuthStore } from "../store/auth";
 import type { Role } from "./Users.vue";
@@ -313,7 +312,7 @@ export default {
 
                 const bodyText = `The user has joined with the following role: ${role}`;
 
-                if (getAdmins.error || error) throw error;
+                if (getAdmins.error) throw getAdmins.error;
 
                 const sendEmailRequest: SendEmailRequest = {
                     sendEmail: admins ?? [],
