@@ -44,24 +44,19 @@ import CalendarComponent from "../components/Calendar.vue";
 import DialogComponent from "../components/DialogComponent.vue";
 import { formatDate } from "../core/functions/date-format";
 import {
-    favoriteGame,
     gameAction,
     getGameStatus,
     getWeather,
-    removeFavoriteGame,
-    removeReservation,
-    requestGame,
     getUserGameStatus,
 } from "../core/functions/games";
 import { supabase } from "../core/functions/supabase";
 import type {
-    Favorite,
     Game,
     Reservation,
     UserGameStatus,
     WeatherResponse,
 } from "../core/types/games.model";
-import { userSessionStore } from "../store";
+import { userProfileStore, userSessionStore } from "../store";
 import { HeartIcon, ArrowUpOnSquareIcon } from "@heroicons/vue/24/outline";
 import { HeartIcon as SolidHeartIcon, EyeIcon } from "@heroicons/vue/24/solid";
 import { useAuthStore } from "../store/auth";
@@ -98,7 +93,7 @@ export default {
         const startMonth = ref<number>(2);
         const startYear = ref<number>(new Date().getFullYear());
 
-        const user = useAuthStore().currentUser?.user;
+        const user = userProfileStore().profile;
 
         const route = useRoute();
         const currentDateRoute = computed(() =>

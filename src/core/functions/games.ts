@@ -1,5 +1,10 @@
 import type { User } from "@supabase/supabase-js";
+import { useAuthStore } from "../../store/auth";
+import { admin } from "../guards/auth";
+import type { SendEmailItem, SendEmailRequest } from "../types/email.model";
 import type { Game, Reservation, UserGameStatus } from "../types/games.model";
+import type { Profile } from "../types/user.model";
+import { sendEmail } from "./email";
 import { supabase } from "./supabase";
 
 export function getGameStatus(
@@ -33,13 +38,13 @@ export async function gameAction(
     userGameStatus: UserGameStatus,
     userReservation: Reservation | undefined,
     selectedGame: Game | undefined,
-    user: User | undefined
+    user: Profile | null
 ) {
     if (
         userGameStatus === "Express Interest" ||
         userGameStatus === "Join Waitlist"
     ) {
-        await requestGame(selectedGame, user?.id ?? "");
+        if (user) await requestGame(selectedGame, user);
     }
 
     if (
@@ -55,7 +60,7 @@ export async function gameAction(
 
 export function getUserGameStatus(
     selectedGame: Game | undefined,
-    user: User | undefined
+    user: Profile | null
 ): UserGameStatus {
     if (selectedGame) {
         const userGame = selectedGame.reservations.find(
@@ -91,15 +96,63 @@ export function getUserGameStatus(
     } else return "Express Interest";
 }
 
-export async function requestGame(game: Game | undefined, profile: string) {
+export async function requestGame(game: Game | undefined, profile: Profile) {
     if (game) {
         try {
+            let getAdmins = await supabase
+                .from("profiles")
+                .select()
+                .eq("role", admin);
+
+            const admins: SendEmailItem[] | undefined = getAdmins.data?.map(
+                (profile: Profile) => {
+                    return {
+                        email: profile.email,
+                        name: `${profile.first_name} ${profile.last_name}`,
+                    } as SendEmailItem;
+                }
+            );
+
+            const heading = `${profile.first_name} ${
+                profile.last_name
+            } has requested tickets for ${new Date(
+                game.date
+            ).getMonth()}/${new Date(game.date).getDate()}/${new Date(
+                game.date
+            ).getFullYear()}`;
+
+            const bodyText = `${profile.first_name} ${profile.last_name}${
+                profile.username ? " (" + profile.username + ")" : ""
+            } has requested tickets to see the ${game.away_team.location} ${
+                game.away_team.name
+            } on ${new Date(game.date).getMonth()}/${new Date(
+                game.date
+            ).getDate()}/${new Date(
+                game.date
+            ).getFullYear()}. Review their request on the admin dashboard.`;
+
             let { error, status } = await supabase.from("reservations").insert({
                 game: game.id,
-                profile: profile,
+                profile: profile.id,
             });
 
-            if (error && status !== 406) throw error;
+            if ((getAdmins.error || error) && status !== 406) throw error;
+
+            const sendEmailRequest: SendEmailRequest = {
+                sendEmail: admins ?? [],
+                subject: heading,
+                sendName: "",
+                header: heading,
+                heading: heading,
+                bodyText: bodyText,
+                cta: `View admin dashboard`,
+                ctaLink: `https://truebluetickets.com/admin`,
+            };
+
+            await sendEmail(
+                useAuthStore().currentUser?.access_token ?? "",
+                sendEmailRequest
+            );
 
             return status;
         } catch (error: any) {
