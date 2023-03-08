@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { authGuard } from "../core/guards/auth";
+import { authGuard, roleGuard } from "../core/guards/auth";
 
 export const admin = "ce7c9953-9ea6-47c8-bf6f-9ffd9a1a6ab8";
 export const guest = "97c08d44-4712-4c7e-b470-f29e1db25522";
@@ -63,6 +63,7 @@ const router = createRouter({
                 authRequired: true,
                 allowedRoles: admin,
             },
+            beforeEnter: roleGuard,
             component: () => import("../views/Admin.vue"),
         },
         {
@@ -70,7 +71,9 @@ const router = createRouter({
             name: "Users",
             meta: {
                 authRequired: true,
+                allowedRoles: admin,
             },
+            beforeEnter: roleGuard,
             component: () => import("../views/Users.vue"),
             children: [
                 {
