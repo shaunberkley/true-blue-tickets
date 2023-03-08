@@ -80,6 +80,7 @@ import {
 import GameDialogComponent from "../components/GameDialogComponent.vue";
 import GameCardComponent from "../components/GameCardComponent.vue";
 import type { Profile } from "../core/types/user.model";
+import { userProfileStore } from "../store";
 
 export default {
     components: { GameDialogComponent, GameCardComponent },
@@ -90,7 +91,7 @@ export default {
         },
     },
     setup(props) {
-        const user = useAuthStore().currentUser?.user;
+        const user = userProfileStore().profile;
 
         const reservations = ref<Reservation[]>();
         const games = ref<Game[]>();
