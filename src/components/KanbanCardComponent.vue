@@ -93,7 +93,7 @@
                         <MenuItem
                             @click="sendWaitlistEmail()"
                             v-slot="{ active }"
-                            v-if="reservation.status !== 'declined'"
+                            v-if="reservation.status === 'declined'"
                         >
                             <button
                                 :class="[
