@@ -149,6 +149,15 @@ export default {
             return [...new Set(res)];
         });
 
+        const acceptedGames: ComputedRef<number[]> = computed(() => {
+            const res = reservations.value
+                ?.filter((res: Reservation) => res.status === "accepted")
+                .map((res: Reservation) => res.game.id) as number[];
+            return [...new Set(res)];
+        });
+
+        console.log(acceptedGames);
+
         const confirmedReservations: ComputedRef<Reservation[] | undefined> =
             computed(() => {
                 const res = reservations.value
@@ -181,8 +190,10 @@ export default {
             computed(() => {
                 const res = reservations.value
                     ?.filter((res: Reservation) => {
+                        console.log(res.game.id);
                         return (
-                            confirmedGames.value.includes(res.game.id) &&
+                            (confirmedGames.value.includes(res.game.id) ||
+                                acceptedGames.value.includes(res.game.id)) &&
                             res.status === "pending"
                         );
                     })
@@ -202,6 +213,7 @@ export default {
                     ?.filter(
                         (res: Reservation) =>
                             !confirmedGames.value.includes(res.game.id) &&
+                            !acceptedGames.value.includes(res.game.id) &&
                             res.status === "pending"
                     )
                     .sort((a: Reservation, b: Reservation) => {
@@ -271,7 +283,11 @@ export default {
 
                 console.log(statusMessage);
 
-                const subject = `Your reservation is waitlisted`;
+                const subject = `Your reservation for ${
+                    new Date(reservation.game.date).getMonth() + 1
+                }/${new Date(reservation.game.date).getDate()}/${new Date(
+                    reservation.game.date
+                ).getFullYear()} is waitlisted`;
 
                 const heading = `Your reservation to see the ${
                     reservation.game.away_team.location
