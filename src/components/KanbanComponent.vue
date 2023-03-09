@@ -16,11 +16,12 @@
                     >
                 </div>
                 <div class="flex flex-col pb-2 overflow-auto pr-2">
-                    <ul class="flex flex-col pb-2 overflow-auto pr-2">
+                    <ul class="flex flex-col pb-28 overflow-auto pr-2">
                         <KanbanCardComponent
                             v-for="reservation in interestsReservations"
                             :reservation="reservation"
                             @updated="update($event.reservation, $event.status)"
+                            @sendWaitlistEmail="sendWaitlistEmail($event)"
                         ></KanbanCardComponent>
                     </ul>
                 </div>
@@ -38,7 +39,7 @@
                     >
                 </div>
                 <div class="flex flex-col pb-2 overflow-auto">
-                    <ul class="flex flex-col pb-2 overflow-auto pr-2">
+                    <ul class="flex flex-col pb-28 overflow-auto pr-2">
                         <KanbanCardComponent
                             v-for="reservation in acceptedReservations"
                             :reservation="reservation"
@@ -60,7 +61,7 @@
                     >
                 </div>
                 <div class="flex flex-col pb-2 overflow-auto">
-                    <ul class="flex flex-col pb-2 overflow-auto pr-2">
+                    <ul class="flex flex-col pb-28 overflow-auto pr-2">
                         <KanbanCardComponent
                             v-for="reservation in confirmedReservations"
                             :reservation="reservation"
@@ -82,11 +83,34 @@
                     >
                 </div>
                 <div class="flex flex-col pb-2 overflow-auto">
-                    <ul class="flex flex-col pb-2 overflow-auto pr-2">
+                    <ul class="flex flex-col pb-28 overflow-auto pr-2">
                         <KanbanCardComponent
                             v-for="reservation in declinedReservations"
                             :reservation="reservation"
                             @updated="update($event.reservation, $event.status)"
+                        ></KanbanCardComponent>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="flex flex-col flex-shrink-0 w-full max-w-[300px] h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden"
+            >
+                <div class="flex items-center flex-shrink-0 h-10 px-2">
+                    <span class="block text-sm font-semibold"
+                        >Waitlisted Reservations</span
+                    >
+                    <span
+                        class="flex items-center justify-center w-5 h-5 ml-2 text-sm font-semibold text-indigo-500 bg-white rounded bg-opacity-30"
+                        >{{ waitlistReservations?.length }}</span
+                    >
+                </div>
+                <div class="flex flex-col pb-2 overflow-auto">
+                    <ul class="flex flex-col overflow-auto pr-2 pb-28">
+                        <KanbanCardComponent
+                            v-for="reservation in waitlistReservations"
+                            :reservation="reservation"
+                            @updated="update($event.reservation, $event.status)"
+                            @sendWaitlistEmail="sendWaitlistEmail($event)"
                         ></KanbanCardComponent>
                     </ul>
                 </div>
@@ -237,6 +261,49 @@ export default {
             componentKey.value++;
         }
 
+        async function sendWaitlistEmail(reservation: Reservation) {
+            console.log("testtt wait");
+            try {
+                let statusMessage =
+                    "Unfortunately somebody beat you to reserving this game. Please view the schedule to reserve another game.";
+                const cta = "View schedule";
+                const ctaLink = "https://truebluetickets.com/";
+
+                console.log(statusMessage);
+
+                const subject = `Your reservation is waitlisted`;
+
+                const heading = `Your reservation to see the ${
+                    reservation.game.away_team.location
+                } ${reservation.game.away_team.name} on ${
+                    new Date(reservation.game.date).getMonth() + 1
+                }/${new Date(reservation.game.date).getDate()}/${new Date(
+                    reservation.game.date
+                ).getFullYear()} is waitlisted.`;
+
+                const bodyText = `${statusMessage}`;
+
+                const sendEmailRequest: SendEmailRequest = {
+                    sendEmail: [{ email: reservation.profile.email, name: "" }],
+                    subject: subject,
+                    sendName: "",
+                    header: heading,
+                    heading: heading,
+                    bodyText: bodyText,
+                    cta: cta,
+                    ctaLink: ctaLink,
+                };
+
+                await sendEmail(
+                    useAuthStore().currentUser?.access_token ?? "",
+                    sendEmailRequest
+                );
+            } catch (error: any) {
+                alert(error.message);
+                return error;
+            }
+        }
+
         async function update(
             reservation: Reservation,
             status: "pending" | "confirmed" | "declined" | "accepted"
@@ -335,8 +402,10 @@ export default {
             confirmedReservations,
             declinedReservations,
             acceptedReservations,
+            waitlistReservations,
             componentKey,
             update,
+            sendWaitlistEmail,
         };
     },
 };

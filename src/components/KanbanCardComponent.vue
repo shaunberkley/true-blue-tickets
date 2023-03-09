@@ -90,6 +90,22 @@
                                 Decline
                             </button>
                         </MenuItem>
+                        <MenuItem
+                            @click="sendWaitlistEmail()"
+                            v-slot="{ active }"
+                            v-if="reservation.status !== 'declined'"
+                        >
+                            <button
+                                :class="[
+                                    active
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]"
+                            >
+                                Send waitlist email
+                            </button>
+                        </MenuItem>
                     </div>
                 </MenuItems>
             </transition>
@@ -169,7 +185,7 @@ export default {
             required: true,
         },
     },
-    emits: ["updated"],
+    emits: ["updated", "sendWaitlistEmail"],
     setup(props, { emit }) {
         function update(
             status: "confirmed" | "pending" | "declined" | "accepted"
@@ -181,9 +197,15 @@ export default {
             console.log("update");
         }
 
+        function sendWaitlistEmail() {
+            console.log("sending wait");
+            emit("sendWaitlistEmail", props.reservation);
+        }
+
         return {
             formatDate,
             update,
+            sendWaitlistEmail,
         };
     },
 };
