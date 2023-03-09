@@ -19,12 +19,6 @@
                         />
                         <span>Directory</span>
                     </router-link>
-                    <ButtonComponent
-                        class="sm:hidden block"
-                        :style="'primary'"
-                        @click="openInviteUser"
-                        >Invite User</ButtonComponent
-                    >
                 </nav>
                 <div class="w-full flex justify-between items-center">
                     <div class="flex items-center gap-4">
@@ -62,12 +56,6 @@
                             ></LoadingPulseBarComponent>
                         </div>
                     </div>
-                    <ButtonComponent
-                        class="hidden sm:block"
-                        :style="'primary'"
-                        @click="openInviteUser"
-                        >Invite User</ButtonComponent
-                    >
                 </div>
             </div>
         </div>
@@ -112,21 +100,6 @@
             </div>
         </div>
     </main>
-
-    <DialogComponent
-        :isOpen="inviteUserDialogOpen"
-        :title="'Invite User'"
-        :disableClose="true"
-        maxWidth="w-[500px]"
-    >
-        <InviteUserComponent
-            v-if="profileRoles"
-            :profileRoles="profileRoles"
-            @save="initiateInviteUser"
-            @close="inviteUserDialogOpen = false"
-        >
-        </InviteUserComponent>
-    </DialogComponent>
 
     <BannerComponent
         :isOpen="bannerOpen"
@@ -217,11 +190,7 @@ export default {
         const legalCase = ref<any | null>();
         const editMode = ref<boolean>(false);
 
-        const profileRoles = ref<SelectItem[]>();
-
         const tabs = ref<Tab[] | []>([]);
-
-        const inviteUserDialogOpen = ref<boolean>(false);
 
         const bannerOpen = ref<boolean>(false);
         const errorMessage = ref<any>("");
@@ -230,7 +199,6 @@ export default {
 
         onMounted(async () => {
             getUser();
-            getProfileRoles();
         });
 
         watch(props, () => {
@@ -290,37 +258,17 @@ export default {
                 : null
         );
 
-        async function getProfileRoles() {
-            const { data, error } = await supabase.from("roles").select(`*`);
-            profileRoles.value = data?.map((role: Role) => {
-                return { label: role.name, value: role.id };
-            }) as SelectItem[];
-        }
-
-        async function initiateInviteUser(invitedUser: InvitedUser) {
-            await inviteUser(invitedUser);
-            inviteUserDialogOpen.value = false;
-        }
-
-        async function openInviteUser() {
-            inviteUserDialogOpen.value = true;
-        }
-
         return {
             legalCase,
             user,
             formatDate,
             editMode,
-            profileRoles,
             tabs,
             currentTab,
             currentTabSelect,
             router,
-            inviteUserDialogOpen,
             bannerOpen,
             errorMessage,
-            openInviteUser,
-            initiateInviteUser,
         };
     },
 };

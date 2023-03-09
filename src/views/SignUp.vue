@@ -275,10 +275,10 @@ export default {
 
             await supabase.from("profiles").insert({
                 id: signUpRes.data.user?.id,
-                first_name: firstName.value,
-                last_name: lastName.value,
-                username: username.value,
-                email: email.value,
+                first_name: firstName.value.trim(),
+                last_name: lastName.value.trim(),
+                username: username.value.trim(),
+                email: email.value.trim(),
                 role: pendingInvite.value?.role,
             });
 

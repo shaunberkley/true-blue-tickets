@@ -11,7 +11,26 @@
             class="w-full sm:max-w-[28rem] flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex flex-col"
         >
             <div class="px-6 pt-6 pb-4">
-                <h2 class="text-lg font-medium text-gray-900">Directory</h2>
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-medium text-gray-900">Directory</h2>
+                    <div class="flex items-center gap-3">
+                        <button
+                            class="btn btn-outline !hover:bg-transparent !bg-transparent !py-0 !px-3 !rounded-lg !min-h-8 !h-8 flex items-center"
+                            @click="pendingInvitesModalOpen = true"
+                        >
+                            <ClockIcon
+                                class="h-5 w-5 text-neutral"
+                                aria-hidden="true"
+                            />
+                        </button>
+                        <button
+                            class="btn btn-primary !py-0 !px-3 !rounded-lg !min-h-8 !h-8 flex items-center"
+                            @click="openInviteUser"
+                        >
+                            <PlusIcon class="h-5 w-5" aria-hidden="true" />
+                        </button>
+                    </div>
+                </div>
                 <p class="mt-1 text-sm text-gray-600">
                     Search directory of {{ items?.length ?? "" }}
                     {{ itemsLabel.toLowerCase() }}
@@ -97,19 +116,55 @@
             </nav>
         </aside>
     </div>
+
+    <DialogComponent
+        :isOpen="inviteUserDialogOpen"
+        :title="'Invite User'"
+        :disableClose="true"
+        maxWidth="w-[500px]"
+    >
+        <InviteUserComponent
+            v-if="profileRoles"
+            :profileRoles="profileRoles"
+            @save="initiateInviteUser"
+            @close="inviteUserDialogOpen = false"
+        >
+        </InviteUserComponent>
+    </DialogComponent>
+
+    <DialogComponent
+        title=""
+        :isOpen="pendingInvitesModalOpen"
+        @closeModal="pendingInvitesModalOpen = false"
+        max-width="max-w-[1080px]"
+    >
+        <div class="mt-8">
+            <PendingInvitesComponent></PendingInvitesComponent>
+        </div>
+    </DialogComponent>
 </template>
 
 <script lang="ts">
+import { supabase } from "../core/functions/supabase";
 import {
     FunnelIcon,
     MagnifyingGlassIcon,
     ChevronLeftIcon,
+    PlusIcon,
 } from "@heroicons/vue/20/solid";
+import { ClockIcon } from "@heroicons/vue/24/outline";
 import { onMounted, ref, watch, type PropType } from "vue";
 import { simpleSearch } from "../core/functions/search";
 import AvatarComponent from "../components/AvatarComponent.vue";
+import InviteUserComponent from "../components/InviteUserComponent.vue";
+
 import { userProfileStore } from "../store";
-import { canEdit } from "../core/functions/user";
+import { canEdit, inviteUser } from "../core/functions/user";
+import DialogComponent from "./DialogComponent.vue";
+import PendingInvitesComponent from "./PendingInvitesComponent.vue";
+import type { InvitedUser } from "../core/types/user.model";
+import type { SelectItem } from "./SelectComponent.vue";
+import type { Role } from "../views/Users.vue";
 
 export interface DirectoryItem {
     id: string;
@@ -143,7 +198,12 @@ export default {
         FunnelIcon,
         MagnifyingGlassIcon,
         ChevronLeftIcon,
+        ClockIcon,
+        PlusIcon,
         AvatarComponent,
+        DialogComponent,
+        PendingInvitesComponent,
+        InviteUserComponent,
     },
     props: {
         items: {
@@ -175,8 +235,13 @@ export default {
         let groupingItems = ref<LetterGrouping[] | []>([]);
         let searchText = ref<string>("");
 
+        const profileRoles = ref<SelectItem[]>();
+        const pendingInvitesModalOpen = ref<boolean>(false);
+        const inviteUserDialogOpen = ref<boolean>(false);
+
         onMounted(() => {
             console.log(props.items);
+            getProfileRoles();
             if (props.items?.length)
                 groupingItems.value = groupNames(props.items);
         });
@@ -188,6 +253,13 @@ export default {
         });
 
         const userProfile = userProfileStore();
+
+        async function getProfileRoles() {
+            const { data, error } = await supabase.from("roles").select(`*`);
+            profileRoles.value = data?.map((role: Role) => {
+                return { label: role.name, value: role.id };
+            }) as SelectItem[];
+        }
 
         function groupNames(arr: Item[]): LetterGrouping[] {
             const map = arr.reduce((acc: any, val: any) => {
@@ -203,6 +275,7 @@ export default {
                 letter: el,
                 subItems: map[el],
             }));
+            console.log(res);
             return res.sort((a: LetterGrouping, b: LetterGrouping) =>
                 a.letter.localeCompare(b.letter)
             );
@@ -217,12 +290,26 @@ export default {
             groupingItems.value = groupNames(newItems);
         }
 
+        async function initiateInviteUser(invitedUser: InvitedUser) {
+            await inviteUser(invitedUser);
+            inviteUserDialogOpen.value = false;
+        }
+
+        async function openInviteUser() {
+            inviteUserDialogOpen.value = true;
+        }
+
         return {
             groupingItems,
             searchText,
             userProfile,
+            pendingInvitesModalOpen,
+            inviteUserDialogOpen,
+            profileRoles,
             search,
             canEdit,
+            initiateInviteUser,
+            openInviteUser,
         };
     },
 };
