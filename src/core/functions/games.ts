@@ -13,20 +13,28 @@ export function getGameStatus(
     onlyText?: boolean
 ) {
     if (!game.blackout) {
-        if (
-            game.reservations.filter(
-                (res: Reservation) => res.status === "confirmed"
-            ).length
-        )
-            if (onlyText) return "Reserved";
-            else return `🚫 ${showText ? "(Reserved)" : ""}`;
         const numberOfInterests: number = game.reservations.filter(
             (res: Reservation) => res.status === "pending"
         ).length;
-        if (numberOfInterests > 0)
+
+        if (
+            game.reservations.filter(
+                (res: Reservation) => res.status === "confirmed"
+            ).length ||
+            game.reservations.filter(
+                (res: Reservation) => res.status === "accepted"
+            ).length
+        ) {
+            if (onlyText) return "Reserved";
+            else return `🚫 ${showText ? "(Reserved)" : ""}`;
+        }
+
+        if (numberOfInterests > 0) {
             return `${!onlyText ? "👀 " : ""}${numberOfInterests} ${
                 showText ? "interested" : ""
             }`;
+        }
+
         return `${!onlyText ? "✅ " : ""}${showText ? "Available" : ""}`;
     } else {
         if (onlyText) return "Blackout";
