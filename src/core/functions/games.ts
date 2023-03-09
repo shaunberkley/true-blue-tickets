@@ -80,6 +80,8 @@ export function getUserGameStatus(
                         ) {
                             return "Leave Waitlist";
                         } else return "Cancel Interest";
+                    case "accepted":
+                        return "Send payment to confirm reservation";
                     case "declined":
                         return "Unavailable";
                 }
@@ -121,9 +123,9 @@ export async function requestGame(game: Game | undefined, profile: Profile) {
 
                 const heading = `${profile.first_name} ${
                     profile.last_name
-                } has requested tickets for ${new Date(
-                    game.date
-                ).getMonth()}/${new Date(game.date).getDate()}/${new Date(
+                } has requested tickets for ${
+                    new Date(game.date).getMonth() + 1
+                }/${new Date(game.date).getDate()}/${new Date(
                     game.date
                 ).getFullYear()}`;
 
@@ -131,7 +133,7 @@ export async function requestGame(game: Game | undefined, profile: Profile) {
                     profile.username ? " (" + profile.username + ")" : ""
                 } has requested tickets to see the ${game.away_team.location} ${
                     game.away_team.name
-                } on ${new Date(game.date).getMonth()}/${new Date(
+                } on ${new Date(game.date).getMonth() + 1}/${new Date(
                     game.date
                 ).getDate()}/${new Date(
                     game.date

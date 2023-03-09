@@ -12,4 +12,5 @@ export interface SendEmailRequest {
     bodyText: string;
     cta: string;
     ctaLink: string;
+    templateId?: string;
 }

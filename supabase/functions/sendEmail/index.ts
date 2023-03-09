@@ -27,6 +27,7 @@ interface SendEmailData {
     bodyText: string;
     cta: string;
     ctaLink: string;
+    templateId?: string;
 }
 
 const corsHeaders = {
@@ -84,7 +85,8 @@ async function sendEmailUtility(sendEmailData: SendEmailData) {
         from: {
             email: "True Blue Tickets <notifications@truebluetickets.com>",
         },
-        templateId: "d-74891619c19f4c0e8eb277ce2643ce08",
+        templateId:
+            sendEmailData.templateId ?? "d-74891619c19f4c0e8eb277ce2643ce08",
     };
     console.log(mail);
 

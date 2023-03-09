@@ -43,6 +43,22 @@
                             </button>
                         </MenuItem>
                         <MenuItem
+                            @click="update('accepted')"
+                            v-slot="{ active }"
+                            v-if="reservation.status !== 'accepted'"
+                        >
+                            <button
+                                :class="[
+                                    active
+                                        ? 'bg-primary text-white'
+                                        : 'text-gray-900',
+                                    'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                ]"
+                            >
+                                Accept
+                            </button>
+                        </MenuItem>
+                        <MenuItem
                             @click="update('confirmed')"
                             v-slot="{ active }"
                             v-if="reservation.status !== 'confirmed'"
@@ -119,7 +135,9 @@
             </div>
             <div class="flex items-center ml-3">
                 👀
-                <span class="ml-1 leading-none">1</span>
+                <span class="ml-1 leading-none">{{
+                    reservation.game.reservations.length
+                }}</span>
             </div>
         </div>
     </li>
@@ -153,7 +171,9 @@ export default {
     },
     emits: ["updated"],
     setup(props, { emit }) {
-        function update(status: "confirmed" | "pending" | "declined") {
+        function update(
+            status: "confirmed" | "pending" | "declined" | "accepted"
+        ) {
             emit("updated", {
                 reservation: props.reservation,
                 status: status,

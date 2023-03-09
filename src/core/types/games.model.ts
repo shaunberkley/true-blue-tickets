@@ -44,15 +44,17 @@ export type UserGameStatus =
     | "Join Waitlist"
     | "Leave Waitlist"
     | "Cancel Interest"
-    | "Unavailable";
+    | "Unavailable"
+    | "Send payment to confirm reservation";
 
 export interface Reservation {
     id: string;
     created_at: Date;
     updated_at: Date;
-    status: "pending" | "confirmed" | "declined";
+    status: "pending" | "accepted" | "confirmed" | "declined";
     game: Game;
     profile: Profile;
+    game_date?: Date;
 }
 
 export interface Favorite {
