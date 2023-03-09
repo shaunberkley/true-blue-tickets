@@ -358,7 +358,11 @@ export default {
 
                 console.log(statusMessage);
 
-                const subject = `Your reservation is ${status}`;
+                const subject = `Your reservation for ${
+                    new Date(reservation.game.date).getMonth() + 1
+                }/${new Date(reservation.game.date).getDate()}/${new Date(
+                    reservation.game.date
+                ).getFullYear()} is ${status}.`;
 
                 const heading = `Your reservation to see the ${
                     reservation.game.away_team.location
