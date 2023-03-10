@@ -238,8 +238,8 @@ export default {
                 bannerOpen.value = true;
             }
 
-            const { data } = await supabase.from("roles").select();
-            roles.value = data as Role[];
+            // const { data } = await supabase.from("roles").select();
+            // roles.value = data as Role[];
         });
 
         async function signUp() {
@@ -289,50 +289,50 @@ export default {
 
             signedUp.value = true;
 
-            try {
-                let getAdmins = await supabase
-                    .from("profiles")
-                    .select()
-                    .eq("role", admin);
+            // try {
+            //     let getAdmins = await supabase
+            //         .from("profiles")
+            //         .select()
+            //         .eq("role", admin);
 
-                const admins: SendEmailItem[] | undefined = getAdmins.data?.map(
-                    (profile: Profile) => {
-                        return {
-                            email: profile.email,
-                            name: `${profile.first_name} ${profile.last_name}`,
-                        } as SendEmailItem;
-                    }
-                );
+            //     const admins: SendEmailItem[] | undefined = getAdmins.data?.map(
+            //         (profile: Profile) => {
+            //             return {
+            //                 email: profile.email,
+            //                 name: `${profile.first_name} ${profile.last_name}`,
+            //             } as SendEmailItem;
+            //         }
+            //     );
 
-                const heading = `${firstName.value} ${lastName.value} has accepted their invitation`;
+            //     const heading = `${firstName.value} ${lastName.value} has accepted their invitation`;
 
-                const role = roles.value?.find(
-                    (role: Role) => role.id === pendingInvite.value?.role
-                )?.name;
+            //     const role = roles.value?.find(
+            //         (role: Role) => role.id === pendingInvite.value?.role
+            //     )?.name;
 
-                const bodyText = `The user has joined with the following role: ${role}`;
+            //     const bodyText = `The user has joined with the following role: ${role}`;
 
-                if (getAdmins.error) throw getAdmins.error;
+            //     if (getAdmins.error) throw getAdmins.error;
 
-                const sendEmailRequest: SendEmailRequest = {
-                    sendEmail: admins ?? [],
-                    subject: heading,
-                    sendName: "",
-                    header: heading,
-                    heading: heading,
-                    bodyText: bodyText,
-                    cta: `View user`,
-                    ctaLink: `https://truebluetickets.com/users/${signUpRes.data.user?.id}`,
-                };
+            //     const sendEmailRequest: SendEmailRequest = {
+            //         sendEmail: admins ?? [],
+            //         subject: heading,
+            //         sendName: "",
+            //         header: heading,
+            //         heading: heading,
+            //         bodyText: bodyText,
+            //         cta: `View user`,
+            //         ctaLink: `https://truebluetickets.com/users/${signUpRes.data.user?.id}`,
+            //     };
 
-                await sendEmail(
-                    useAuthStore().currentUser?.access_token ?? "",
-                    sendEmailRequest
-                );
-            } catch (error: any) {
-                alert(error.message);
-                return error;
-            }
+            //     await sendEmail(
+            //         useAuthStore().currentUser?.access_token ?? "",
+            //         sendEmailRequest
+            //     );
+            // } catch (error: any) {
+            //     alert(error.message);
+            //     return error;
+            // }
         }
 
         return {
