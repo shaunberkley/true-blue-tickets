@@ -54,10 +54,15 @@ import { supabase } from "../core/functions/supabase";
 const sent = ref(false);
 const email = ref("");
 
+const base_url = window.location.origin;
+
 const handleLogin = async () => {
     try {
         const { error } = await supabase.auth.signInWithOtp({
             email: email.value,
+            options: {
+                emailRedirectTo: base_url,
+            },
         });
         if (error) throw error;
         sent.value = true;
