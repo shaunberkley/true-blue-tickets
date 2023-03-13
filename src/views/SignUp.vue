@@ -277,7 +277,7 @@ export default {
                 id: signUpRes.data.user?.id,
                 first_name: firstName.value.trim(),
                 last_name: lastName.value.trim(),
-                username: username.value.trim(),
+                username: username.value ? username.value.trim() : undefined,
                 email: email.value.trim(),
                 role: pendingInvite.value?.role,
             });
